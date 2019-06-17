@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 interface teiapp {
    id: string;
@@ -16,10 +16,9 @@ class TeiApp extends React.Component<teiapp> {
    // }
    
    render() {
-      // const id = this.props.id;
       return (
          <div>
-            <label>TeiApp here</label>
+            <label>TeiApp </label>
             <label>{this.props.id}</label>
          </div>
       );
