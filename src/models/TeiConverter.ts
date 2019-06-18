@@ -18,7 +18,7 @@ export class TeiConverter {
                 TeiConverter.fillComps();
         }
 
-        private static fillComps() {
+        private static fillComps() { 
                 const componentsClass: any = {
                         'app': {reactCompClass: 'TeiApp', props: ['id']} as ReactCompInfo,
                         'rdgGrp': {reactCompClass: 'TeiRdgGrp', props: ['id', 'n']} as ReactCompInfo,
@@ -54,7 +54,7 @@ export class TeiConverter {
                                 return {};
                         }       
                         const val = nodeAttributes[xmlProp].nodeValue;
-                        return {key: prop, value: val};
+                        return {[prop]: val};
                 });
 
                 return {
@@ -83,9 +83,19 @@ export class TeiConverter {
                                 const valueComponent = this.buildProperties(node, compInfo);
                                 console.log('valueComponent=', valueComponent);
                                 // return create react element
-                                return valueComponent;
-                                // return React.createElement(valueComponent.reactCompClass, valueComponent.valueProps);
+                                var props: any = {};
+                                // TODO: add index
+                                debugger
+                                for (var a of Object.values(valueComponent.valueProps)) {
+                                        for (let key in (a as any)) {
+                                                props[key] = a[key];
+                                        }
+                                        
+                                        console.log("props=", props)
+                                }
                                 
+                                // return valueComponent;
+                                return React.createElement(valueComponent.reactCompClass, props);
                         } 
                 }
         }
