@@ -1,17 +1,23 @@
 import React from 'react';
+import TeiElement from '../tei-components/TeiElement';
 
 interface ReactCompInfo {
-        reactCompClass: string;
+        // reactCompClass: string;
+        tag: string;
         props: string[];
 }
 
 interface ReactValueCompInfo {
-        reactCompClass: string;
+        // reactCompClass: string;
+        tag: string;
         valueProps: [];
 }
 
 export class TeiConverter {
         private static _comps : Map<string, ReactCompInfo>;
+        private static teiElement = TeiElement;
+        private static index = 0;
+        public elementsList =[];
 
         constructor() {
                 TeiConverter._comps = new Map<string, ReactCompInfo>();
@@ -19,11 +25,17 @@ export class TeiConverter {
         }
 
         private static fillComps() { 
+                // const componentsClass: any = {
+                //         'app': {reactCompClass: 'TeiApp', props: ['id']} as ReactCompInfo,
+                //         'rdgGrp': {reactCompClass: 'TeiRdgGrp', props: ['id', 'n']} as ReactCompInfo,
+                //         'rdg': {reactCompClass: 'TeiRdg', props: ['wit']} as ReactCompInfo,
+                //         'seg': {reactCompClass: 'TeiSeg', props: ['id']} as ReactCompInfo, // 'part'
+                // };
                 const componentsClass: any = {
-                        'app': {reactCompClass: 'TeiApp', props: ['id']} as ReactCompInfo,
-                        'rdgGrp': {reactCompClass: 'TeiRdgGrp', props: ['id', 'n']} as ReactCompInfo,
-                        'rdg': {reactCompClass: 'TeiRdg', props: ['wit']} as ReactCompInfo,
-                        'seg': {reactCompClass: 'TeiSeg', props: ['id']} as ReactCompInfo, // 'part'
+                        'app': {tag: 'app', props: ['id']} as ReactCompInfo,
+                        'rdgGrp': {tag: 'rdgGrp', props: ['id', 'n']} as ReactCompInfo,
+                        'rdg': {tag: 'rdg', props: ['wit']} as ReactCompInfo,
+                        'seg': {tag: 'seg', props: ['id', 'part']} as ReactCompInfo,
                 };
 
                 for (let key in componentsClass) {
@@ -58,7 +70,8 @@ export class TeiConverter {
                 });
 
                 return {
-                        reactCompClass: compInfo.reactCompClass,
+                        // reactCompClass: compInfo.reactCompClass,
+                        tag: compInfo.tag,
                         valueProps
                 } as ReactValueCompInfo;
         }
@@ -81,21 +94,25 @@ export class TeiConverter {
                         if (compInfo) {
                                 // build properties
                                 const valueComponent = this.buildProperties(node, compInfo);
-                                console.log('valueComponent=', valueComponent);
+
                                 // return create react element
-                                var props: any = {};
-                                // TODO: add index
-                                debugger
+                                var props: any = {
+                                        tag: valueComponent.tag,
+                                        key: TeiConverter.index++,
+                                        key1: TeiConverter.index,
+                                };
+                                
                                 for (var a of Object.values(valueComponent.valueProps)) {
                                         for (let key in (a as any)) {
                                                 props[key] = a[key];
                                         }
-                                        
-                                        console.log("props=", props)
                                 }
+                                console.log("props=", props);
                                 
-                                // return valueComponent;
-                                return React.createElement(valueComponent.reactCompClass, props);
+                                (this.elementsList as any).push(React.createElement(TeiConverter.teiElement, props));
+                                // return this.elementsList;
+                                // return React.createElement(valueComponent.reactCompClass, props);
+                                // return React.createElement(TeiConverter.teiElement, props);
                         } 
                 }
         }
@@ -103,5 +120,7 @@ export class TeiConverter {
 
 export function tryConverter(node: Node) {
         var converter = new TeiConverter();
-        console.log("tryConverter result:", converter.teiToReactElement(node));
+        converter.teiToReactElement(node);
+        console.log("tryConverter result:", converter.elementsList);
+        return converter.elementsList;
 }

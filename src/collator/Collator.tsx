@@ -1,8 +1,7 @@
 import React from 'react';
 import { collateFromURL } from '../tei-processing/collation-gathering';
-import TeiApp from '../tei-components/TeiApp';
 import { tryConverter } from '../models/TeiConverter';
-// import TeiRdgGrp from '../tei-components/TeiRdgGrp';
+import TeiElement from '../tei-components/TeiElement';
 
 class Collator extends React.Component {
     state = {
@@ -34,28 +33,12 @@ class Collator extends React.Component {
     }
 
     async collate() {
-        const gatherer = await collateFromURL('https://raw.githubusercontent.com/PghFrankenstein/fv-data/master/standoff_Spine/spine_C04.xml');
+        const gatherer = await collateFromURL('https://raw.githubusercontent.com/PghFrankenstein/fv-data/master/standoff_Spine/spine_C02.xml');
         await gatherer.dereferencePointers();
         const ab = gatherer.collation.getElementsByTagName('ab')[0]; // 4 ab ?
-        tryConverter(ab);
+        const elements = tryConverter(ab);
         
-        const appElements = Array.from(gatherer.collation.getElementsByTagName('app'));
-
-        // Take gatherer.collation and turn it into a React element tree. Plug it into this.elements        
-        const elem: any = [];
-        appElements.forEach((element, index) => {
-            const id: string = element.attributes[0].nodeValue || '';
-            elem.push(React.createElement(TeiApp, {id: id, key: index} ));
-        });
-        
-        // appElements = Array.from(gatherer.collation.getElementsByTagName('rdgGrp'));
-
-        // appElements.forEach((element, index) => {
-        //     const id: string = element.attributes[1].nodeValue || '';
-        //     elem.push(React.createElement(TeiRdgGrp, {id: id, n: '1', key: index} ));
-        // });
-        
-        this.setState( { processing: false, elements: [elem]});
+        this.setState( { processing: false, elements: [elements]});
     }
 }
 
