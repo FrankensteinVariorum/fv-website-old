@@ -2,10 +2,10 @@ import React from 'react';
 
 interface teielement {
         tag: string;
-        key1: number;
         id: string;
         n: string;
         wit: string;
+        type: string;
 }
 
 class TeiElement extends React.Component<teielement> {
@@ -14,7 +14,8 @@ class TeiElement extends React.Component<teielement> {
       return (
          <div>
             {/* <label>TeiElement </label> */}
-            <label>key={this.props.key1}, tag={this.props.tag}, id={this.props.id}, n={this.props.n}, wit={this.props.wit}</label>
+            <label>{this.props.children}</label>
+            <label>tag={this.props.tag}, id={this.props.id}, n={this.props.n}, wit={this.props.wit}, type={this.props.type}</label>
          </div>
       );
    }

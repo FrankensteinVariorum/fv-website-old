@@ -1,7 +1,6 @@
 import React from 'react';
 import { collateFromURL } from '../tei-processing/collation-gathering';
-import { tryConverter } from '../models/TeiConverter';
-import TeiElement from '../tei-components/TeiElement';
+import { TeiConverter } from '../models/TeiConverter';
 
 class Collator extends React.Component {
     state = {
@@ -35,10 +34,13 @@ class Collator extends React.Component {
     async collate() {
         const gatherer = await collateFromURL('https://raw.githubusercontent.com/PghFrankenstein/fv-data/master/standoff_Spine/spine_C02.xml');
         await gatherer.dereferencePointers();
-        const ab = gatherer.collation.getElementsByTagName('ab')[0]; // 4 ab ?
-        const elements = tryConverter(ab);
-        
-        this.setState( { processing: false, elements: [elements]});
+
+        const converter = new TeiConverter();
+        const node = gatherer.collation.getElementsByTagName('ab')[0];
+
+        const reactElement = converter.teiToReactElement(node);
+        console.log("**************reactElement", reactElement);
+        this.setState( { processing: false, elements: [reactElement]});
     }
 }
 
