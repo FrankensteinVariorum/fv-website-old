@@ -1,6 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-// import { NormalizesEdition } from '../../classes/NormalizedEdition';
 import './EditionSelector.css';
 import { NormalizesEdition } from '../../classes/NormalizedEdition';
 import { selectOption } from '../../classes/utils';
@@ -12,9 +11,6 @@ interface EditionSelectorProps {
 }
 
 class EditionSelector extends React.Component<EditionSelectorProps> {
-    constructor(props: any) {
-        super(props);
-    }
 
     state = {
         edition: '',

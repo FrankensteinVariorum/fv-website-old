@@ -23,11 +23,18 @@ export class TeiConverter {
 
         private static fillComps() {
                 const componentsClass: any = {
+                        'body': {tag: 'body', props: []} as ReactCompInfo,
+                        'div': {tag: 'div', props: ['type']} as ReactCompInfo,
                         'app': {tag: 'app', props: ['id']} as ReactCompInfo,
                         'rdgGrp': {tag: 'rdgGrp', props: ['id', 'n']} as ReactCompInfo,
                         'rdg': {tag: 'rdg', props: ['wit']} as ReactCompInfo,
                         'seg': {tag: 'seg', props: ['id', 'part']} as ReactCompInfo,
                         'ab': {tag: 'ab', props: ['type']} as ReactCompInfo,
+                        'p': {tag: 'p', props: ['id']} as ReactCompInfo,
+                        'pb': {tag: 'pb', props: ['n', 'id']} as ReactCompInfo,
+                        'hi': {tag: 'hi', props: ['id']} as ReactCompInfo,
+                        'head': {tag: 'head', props: ['id']} as ReactCompInfo,
+                        'milestone': {tag: 'milestone', props: ['n', 'type', 'unit']} as ReactCompInfo,
                 };
 
                 for (let key in componentsClass) {
@@ -70,6 +77,7 @@ export class TeiConverter {
                 const reactChildren: ReactNode[] = [];
                 // create elements for all children
                 if (node.hasChildNodes()) {
+                        // TODO: add texts (no new line text)
                         const children = Array.from(node.childNodes).filter(c => c.nodeType === 1); // (no 3- #text node, new line ?)
 
                         for (let i = 0; i < children.length; i++) {

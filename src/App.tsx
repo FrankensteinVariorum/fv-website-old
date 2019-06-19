@@ -10,9 +10,9 @@ class App extends React.Component {
         <header className="App-header">         
           {/* <Collator/> */}
         </header>
-        <body className="App">
+        <div className="App">
           <Viewer />
-        </body>
+        </div>
       </div>);
   }
 }
