@@ -1,0 +1,22 @@
+if: branch=master
+
+language: node_js
+
+node_js:
+  - "10"
+
+cache: yarn
+
+script: yarn build
+
+deploy:
+  provider: s3
+  access_key_id: ${AWS_ACCESS_KEY_ID}
+  secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+  bucket: "fv-website.chelem"
+  skip_cleanup: true
+  local_dir: build
+  on:
+    branch: master
+
+
