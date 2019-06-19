@@ -1,19 +1,18 @@
 import React from 'react';
-import logo from './logo.jpg';
 import './App.css';
-import Collator from './collator/Collator';
+// import Collator from './collator/Collator';
+import Viewer from './components/Viewer/Viewer';
 
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Hump? What hump?
-          </p>
-          <Collator/>
+      <div>
+        <header className="App-header">         
+          {/* <Collator/> */}
         </header>
+        <body className="App">
+          <Viewer />
+        </body>
       </div>);
   }
 }

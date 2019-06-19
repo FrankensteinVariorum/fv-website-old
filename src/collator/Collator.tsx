@@ -1,6 +1,6 @@
 import React from 'react';
 import { collateFromURL } from '../tei-processing/collation-gathering';
-import { TeiConverter } from '../models/TeiConverter';
+import { TeiConverter } from '../classes/TeiConverter';
 
 class Collator extends React.Component {
     state = {
