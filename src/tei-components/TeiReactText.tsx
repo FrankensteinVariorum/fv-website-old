@@ -8,7 +8,7 @@ interface TeiReactTextProps {
 class TeiReactText extends React.Component<TeiReactTextProps> {
      
    render() {
-      const indent = ' '.repeat(this.props.x_depth);
+      const indent = ' '.repeat(this.props.x_depth * 2);
 
       return (
           <span className="tei-text">
