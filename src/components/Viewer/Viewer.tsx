@@ -34,6 +34,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         {value: '10', label: '10'}];
 
     output = (evt: XMLDocument) => {
+        console.log("output changed", evt);
         this.setState( {xml: evt} );
     }    
 

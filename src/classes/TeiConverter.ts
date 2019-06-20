@@ -1,76 +1,23 @@
 import React, { ReactNode } from 'react';
-import TeiElement from '../tei-components/TeiElement';
-
-interface ReactCompInfo {
-        tag: string;
-        props: string[];
-}
-
-interface ReactValueCompInfo {
-        tag: string;
-        valueProps: [];
-}
+import TeiReactElement from '../tei-components/TeiReactElement';
 
 export class TeiConverter {
-        private static _comps : Map<string, ReactCompInfo>;
-        private static teiElement = TeiElement;
+        private static TeiReactElement = TeiReactElement;
         private static index = 0;
 
-        constructor() {
-                TeiConverter._comps = new Map<string, ReactCompInfo>();
-                TeiConverter.fillComps();
-        }
-
-        private static fillComps() {
-                const componentsClass: any = {
-                        'body': {tag: 'body', props: []} as ReactCompInfo,
-                        'div': {tag: 'div', props: ['type']} as ReactCompInfo,
-                        'app': {tag: 'app', props: ['id']} as ReactCompInfo,
-                        'rdgGrp': {tag: 'rdgGrp', props: ['id', 'n']} as ReactCompInfo,
-                        'rdg': {tag: 'rdg', props: ['wit']} as ReactCompInfo,
-                        'seg': {tag: 'seg', props: ['id', 'part']} as ReactCompInfo,
-                        'ab': {tag: 'ab', props: ['type']} as ReactCompInfo,
-                        'p': {tag: 'p', props: ['id']} as ReactCompInfo,
-                        'pb': {tag: 'pb', props: ['n', 'id']} as ReactCompInfo,
-                        'hi': {tag: 'hi', props: ['id']} as ReactCompInfo,
-                        'head': {tag: 'head', props: ['id']} as ReactCompInfo,
-                        'milestone': {tag: 'milestone', props: ['n', 'type', 'unit']} as ReactCompInfo,
-                };
-
-                for (let key in componentsClass) {
-                        TeiConverter._comps.set(key, componentsClass[key]);
-                }
-        }
-
-        private getComp(tag: string): ReactCompInfo | undefined {
-                if (!TeiConverter._comps.has(tag)) {
-                    console.error(`Can't find component for ${tag}.`);
-                    return undefined;
-                }
-        
-                return TeiConverter._comps.get(tag)!;
-        }
-
-        private buildProperties(node: Node, compInfo: ReactCompInfo): ReactValueCompInfo {
+        private buildProperties(node: Node): any {
                 const nodeAttributes = (node as any).attributes;
-        
-                var valueProps = compInfo.props.map((prop) => {
-                        var xmlProp = prop;
-                        if (prop === 'id') {
-                                xmlProp = 'xml:id';
-                        }
-                        if (!nodeAttributes[xmlProp]) {
-                                console.error(`There is no property '${xmlProp}' in '${node.nodeName}' node.`);
-                                return {};
-                        }       
-                        const val = nodeAttributes[xmlProp].nodeValue;
-                        return {[prop]: val};
-                });
+                const valueProps: any = {};
 
-                return {
-                        tag: compInfo.tag,
-                        valueProps
-                } as ReactValueCompInfo;
+                for (var i = 0; i < nodeAttributes.length; i++) {
+                        let name = nodeAttributes[i].nodeName;
+                        if (name === 'xml:id') {
+                                name = 'id';
+                        }
+                        valueProps[name] = nodeAttributes[i].nodeValue;
+                }
+
+                return valueProps;
         }
 
         public teiToReactElement(node: Node, depth: number): ReactNode {  // Returns a single React element
@@ -86,36 +33,22 @@ export class TeiConverter {
                         }
                 }
 
-                // find reactCompInfo
-                let compInfo: ReactCompInfo | undefined;
-                compInfo = this.getComp(node.nodeName);
-                
-                if (compInfo) {
-                        // build properties
-                        const valueComponent = this.buildProperties(node, compInfo);
+                // build properties
+                const valueComponent = this.buildProperties(node);
 
-                        // return create react element
-                        var props: any = {
-                                tag: valueComponent.tag,
-                                key: TeiConverter.index++,
-                                x_depth: depth
-                        };
-                        
-                        for (var a of Object.values(valueComponent.valueProps)) {
-                                for (let key in (a as any)) {
-                                        props[key] = a[key];
-                                }
-                        }                        
-                        const reactElement = React.createElement(TeiConverter.teiElement, props, reactChildren); // Pass children
-
-                        return reactElement;
+                // return create react element
+                var props: any = {
+                        tag: node.nodeName,
+                        key: TeiConverter.index++,
+                        x_depth: depth,
+                        teiProps: valueComponent
+                };
+                if (valueComponent.id) {
+                        props['id'] = valueComponent.id;
                 }
-                // else {
-                //         props = {
-                //                 tag: 'empty_tag',
-                //                 key: 9999,
-                //         };
-                //         return React.createElement(TeiConverter.teiElement, props)
-                // }
+                     
+                const reactElement = React.createElement(TeiConverter.TeiReactElement, props, reactChildren); // Pass children
+
+                return reactElement;
         }
 }

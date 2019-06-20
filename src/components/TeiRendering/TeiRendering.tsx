@@ -40,7 +40,6 @@ class TeiRendering extends React.Component<TeiRenderingData, TeiRenderingState> 
         return (
             <div>
                 { this.state.processing ? 'Processing...' : this.state.elements }
-                <pre>{this.props.xml.documentElement.outerHTML}</pre>
             </div>
         );
     }
