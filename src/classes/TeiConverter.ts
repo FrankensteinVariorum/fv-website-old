@@ -73,7 +73,7 @@ export class TeiConverter {
                 } as ReactValueCompInfo;
         }
 
-        public teiToReactElement(node: Node): ReactNode {  // Returns a single React element
+        public teiToReactElement(node: Node, depth: number): ReactNode {  // Returns a single React element
                 const reactChildren: ReactNode[] = [];
                 // create elements for all children
                 if (node.hasChildNodes()) {
@@ -81,7 +81,7 @@ export class TeiConverter {
                         const children = Array.from(node.childNodes).filter(c => c.nodeType === 1); // (no 3- #text node, new line ?)
 
                         for (let i = 0; i < children.length; i++) {
-                                const child = this.teiToReactElement(children[i]);
+                                const child = this.teiToReactElement(children[i], depth + 1);
                                 reactChildren.push(child);
                         }
                 }
@@ -98,6 +98,7 @@ export class TeiConverter {
                         var props: any = {
                                 tag: valueComponent.tag,
                                 key: TeiConverter.index++,
+                                x_depth: depth
                         };
                         
                         for (var a of Object.values(valueComponent.valueProps)) {

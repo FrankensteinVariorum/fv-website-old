@@ -38,7 +38,7 @@ class Collator extends React.Component {
         const converter = new TeiConverter();
         const node = gatherer.collation.getElementsByTagName('ab')[0];
 
-        const reactElement = converter.teiToReactElement(node);
+        const reactElement = converter.teiToReactElement(node, 0);
         console.log("**************reactElement", reactElement);
         this.setState( { processing: false, elements: [reactElement]});
     }
