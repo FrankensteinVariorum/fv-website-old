@@ -10,20 +10,16 @@ interface TeiReactElementProps {
 class TeiReactElement extends React.Component<TeiReactElementProps> {
      
    render() {
-      // console.log("props", this.props);
-      let spaces = '';
-      for (let i = 0; i < this.props.x_depth; i++) {
-         spaces += '  ';
-      }
+      const indent = ' '.repeat(this.props.x_depth * 2);
 
       const tag = `<${this.props.tag}>`;
       const closeTag = `</${this.props.tag}>`;
 
       return (
-         <div className={`tei-${this.props.tag}`} data-tei-tag={`${this.props.tag}`}>
-            <pre>{spaces}{tag}</pre>
+         <div className="tei-element {`tei-${this.props.tag}`}" data-tei-tag={`${this.props.tag}`}>
+            <pre>{indent}{tag}</pre>
             {this.props.children}
-            <pre>{spaces}{closeTag}</pre>
+            <pre>{indent}{closeTag}</pre>
          </div>
       );
    }

@@ -6,7 +6,7 @@ export class CustomElements {
         // this.xml = xml;
         const tags = this.getTags(xml.getElementsByTagName('body')[0], []);
         this.xmlTags = new Set(tags);
-        console.log("xmlTags=", this.xmlTags);
+        //console.debug("xmlTags=", this.xmlTags);
     }
   
     private getTags(node: Node, tags: string[]): string[] {
