@@ -11,7 +11,7 @@ class TeiReactText extends React.Component<TeiReactTextProps> {
       const indent = ' '.repeat(this.props.x_depth * 2);
 
       return (
-          <span className="tei-text">
+          <span className="tei-cdata">
             <pre>{ indent }{ this.props.text }</pre>      
           </span>
       );
