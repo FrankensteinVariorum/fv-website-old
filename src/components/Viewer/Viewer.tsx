@@ -17,7 +17,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     }
 
     onNewChunk = async (edition: Edition, chunk: number) => {
-        const doc = await edition.getChunk(chunk);
+        const doc = await edition.getXML(chunk);
         this.setState( {xml: doc} );
     }    
 
