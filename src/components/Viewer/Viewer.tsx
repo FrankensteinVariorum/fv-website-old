@@ -1,7 +1,7 @@
 import React from 'react';
 import EditionSelector from '../EditionSelector/EditionSelector';
 import TeiRendering from '../TeiRendering/TeiRendering';
-import { selectOption } from '../../classes/utils';
+import { SelectOption } from '../../classes/utils';
 
 interface ViewerProperties { }
 
@@ -15,13 +15,13 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         xml: undefined,
     }
 
-    editionOptions: selectOption[] = [
+    editionOptions: SelectOption[] = [
         {value: '1818', label: '1818'},
         {value: '1823', label: '1823'},
         {value: '1831', label: '1831'},
         {value: 'Thomas', label: 'Thomas'}];
 
-    chunkOptions: selectOption[] = [
+    chunkOptions: SelectOption[] = [
         {value: '01', label: '1'},
         {value: '02', label: '2'},
         {value: '03', label: '3'},

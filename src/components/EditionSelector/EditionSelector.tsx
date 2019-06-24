@@ -1,12 +1,12 @@
 import React from 'react';
 import Select from 'react-select';
 import './EditionSelector.css';
-import { NormalizesEdition } from '../../classes/NormalizedEdition';
-import { selectOption } from '../../classes/utils';
+import { NormalizedEdition } from '../../tei-processing/types';
+import { SelectOption } from '../../classes/utils';
 
 interface EditionSelectorProps {
-        editionOptions: selectOption[];
-        chunkOptions: selectOption[];
+        editionOptions: SelectOption[];
+        chunkOptions: SelectOption[];
         func: Function;
 }
 
@@ -18,18 +18,18 @@ class EditionSelector extends React.Component<EditionSelectorProps> {
     }
     
     load = async () => {
-        const normalizedEdition = new NormalizesEdition({code: this.state.edition});
+        const normalizedEdition = new NormalizedEdition({code: this.state.edition});
         const chunkData = await normalizedEdition.fetchChunks(this.state.chunk);
 
         this.props.func(chunkData);
     }
 
-    editionChanged = (selectedOption: selectOption) => {
+    editionChanged = (selectedOption: SelectOption) => {
         this.setState({ edition: selectedOption.value });
         this.setState({ chunk: '' });
     }
 
-    chunkChanged = (selectedOption: selectOption) => {
+    chunkChanged = (selectedOption: SelectOption) => {
         this.setState({ chunk: selectedOption.value });
     }
     

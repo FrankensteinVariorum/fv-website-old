@@ -1,3 +1,5 @@
+/* This file contains a class that takes the TEI and converts it into a React tree */
+
 import React, { ReactNode } from 'react';
 import TeiReactElement from '../tei-components/TeiReactElement';
 import TeiReactText from '../tei-components/TeiReactText';

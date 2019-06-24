@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { TeiConverter } from '../../classes/TeiConverter';
+import { TeiConverter } from '../../tei-processing/tei-converter';
 
 interface TeiRenderingData {
     xml: XMLDocument;
