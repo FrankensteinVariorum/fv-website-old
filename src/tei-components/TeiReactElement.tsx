@@ -16,7 +16,7 @@ class TeiReactElement extends React.Component<TeiReactElementProps> {
       const closeTag = `</${this.props.tag}>`;
 
       return (
-         <div className="tei-element {`tei-${this.props.tag}`}" data-tei-tag={`${this.props.tag}`}>
+         <div className={`tei-element tei-${this.props.tag}`} data-tei-tag={`${this.props.tag}`}>
             <pre>{indent}{tag}</pre>
             {this.props.children}
             <pre>{indent}{closeTag}</pre>

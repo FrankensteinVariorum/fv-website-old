@@ -1,7 +1,8 @@
 import React from 'react';
 import EditionSelector from '../EditionSelector/EditionSelector';
 import TeiRendering from '../TeiRendering/TeiRendering';
-import { SelectOption } from '../../classes/utils';
+import FvStore from '../../data/store';
+import { Edition } from '../../data/types';
 
 interface ViewerProperties { }
 
@@ -15,38 +16,20 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         xml: undefined,
     }
 
-    editionOptions: SelectOption[] = [
-        {value: '1818', label: '1818'},
-        {value: '1823', label: '1823'},
-        {value: '1831', label: '1831'},
-        {value: 'Thomas', label: 'Thomas'}];
-
-    chunkOptions: SelectOption[] = [
-        {value: '01', label: '1'},
-        {value: '02', label: '2'},
-        {value: '03', label: '3'},
-        {value: '04', label: '4'},
-        {value: '05', label: '5'},
-        {value: '06', label: '6'},
-        {value: '07', label: '7'},
-        {value: '08', label: '8'},
-        {value: '09', label: '9'},
-        {value: '10', label: '10'}];
-
-    output = (evt: XMLDocument) => {
-        this.setState( {xml: evt} );
+    onNewChunk = async (edition: Edition, chunk: number) => {
+        const doc = await edition.getChunk(chunk);
+        this.setState( {xml: doc} );
     }    
 
     render() {
         return (
             <div>
-                <EditionSelector editionOptions={this.editionOptions} chunkOptions={this.chunkOptions} func={this.output} />
+                <EditionSelector editions={FvStore.editions} onChunkSelected={this.onNewChunk} />
                 { this.state.xml ? <TeiRendering xml={this.state.xml!} /> : '' }
             </div>
 
         );
     }
-
 }
 
 export default Viewer;

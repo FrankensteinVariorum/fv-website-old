@@ -1,36 +1,64 @@
 import React from 'react';
 import Select from 'react-select';
 import './EditionSelector.css';
-import { NormalizedEdition } from '../../tei-processing/types';
-import { SelectOption } from '../../classes/utils';
+import { Edition } from '../../data/types';
+import FvStore from '../../data/store';
 
-interface EditionSelectorProps {
-        editionOptions: SelectOption[];
-        chunkOptions: SelectOption[];
-        func: Function;
+interface SelectOption {
+    value: string;
+    label: string;
 }
 
-class EditionSelector extends React.Component<EditionSelectorProps> {
+interface EditionSelectorProps {
+    editions: Edition[],
+    onChunkSelected: (edition: Edition, chunk: number) => void;
+}
+
+interface EditionSelectorState {
+    availableEditions: SelectOption[],
+    availableChunks: SelectOption[],
+    edition: Edition | undefined,
+    chunk: number | undefined,
+}
+
+class EditionSelector extends React.Component<EditionSelectorProps, EditionSelectorState> {
 
     state = {
-        edition: '',
-        chunk: ''
+        availableEditions: [] as SelectOption[],
+        availableChunks: [] as SelectOption[],
+        edition: undefined as Edition | undefined,
+        chunk: undefined as number | undefined,
     }
     
     load = async () => {
-        const normalizedEdition = new NormalizedEdition({code: this.state.edition});
-        const chunkData = await normalizedEdition.fetchChunks(this.state.chunk);
+        if (!this.state.edition || !this.state.chunk) {
+            console.warn('Load clicked with no edition or chunk');
+            return;
+        }
 
-        this.props.func(chunkData);
+        this.props.onChunkSelected(this.state.edition, this.state.chunk);;
+    }
+
+    componentDidMount = () => {
+        const editions = FvStore.editions.map((ed) => ({ value: ed.code, label: ed.name } as SelectOption));
+
+        this.setState({ availableEditions: editions, availableChunks: [], });
     }
 
     editionChanged = (selectedOption: SelectOption) => {
-        this.setState({ edition: selectedOption.value });
-        this.setState({ chunk: '' });
+        const edition = FvStore.editions.find((ed) => ed.code === selectedOption.value);
+        if(!edition) {
+            console.warn(`Couldn't find edition for selection ${selectedOption.value}`);
+            return;
+        }
+
+        const chunks = edition.chunks.map((c) => ({ value: c.toString(), label: c.toString() } as SelectOption));
+        this.setState( { edition, availableChunks: chunks, });
     }
 
     chunkChanged = (selectedOption: SelectOption) => {
-        this.setState({ chunk: selectedOption.value });
+        const chunk = parseInt(selectedOption.value);
+        this.setState({ chunk: chunk });
     }
     
     render() {
@@ -40,14 +68,14 @@ class EditionSelector extends React.Component<EditionSelectorProps> {
             <Select
                 className='select-style'
                 onChange={this.editionChanged}
-                options={this.props.editionOptions}
+                options={this.state.availableEditions}
             ></Select>
 
             <label>Chunk</label>
             <Select
                 className='select-style'
                 onChange={this.chunkChanged}
-                options={this.props.chunkOptions}
+                options={this.state.availableChunks}
             />
 
             <button onClick={this.load}>Load</button>
