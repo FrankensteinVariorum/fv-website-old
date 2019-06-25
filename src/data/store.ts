@@ -1,5 +1,6 @@
 import XmlCache from "./xml-cache";
-import { Edition, Spine } from "./types";
+import { Edition } from "./types";
+import { Spine } from "./spine";
 
 /*
  * This class contains the application Store, which holds all the TEI data, as well as processed data.
@@ -27,12 +28,22 @@ import { Edition, Spine } from "./types";
          this.spines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => new Spine(i));
      }
 
-     public getEdition(code: string) {
-         return this.editions.find((ed) => ed.code === code);
+     public getEdition(code: string): Edition {
+         const ed = this.editions.find((ed) => ed.code === code);
+
+         if (!ed) {
+             throw new Error(`Can't find edition ${code}`);
+         }
+         return ed;
      }
 
-     public getSpine(chunk: number) {
-         return this.spines.find((sp) => sp.chunkNumber === chunk);
+     public getSpine(chunk: number): Spine {
+         const spine = this.spines.find((sp) => sp.chunkNumber === chunk);
+
+         if(!spine) {
+             throw new Error(`Can't find spine for chunk ${chunk}`);
+         }
+         return spine;
      }
  }
 

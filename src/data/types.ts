@@ -1,4 +1,5 @@
 import FvStore from "./store";
+import { Spine } from "./spine";
 
 export class Edition {
     public readonly code: string = ''; // 1818, 1823, 1831, Thomas, MS
@@ -29,7 +30,7 @@ export class Chunk {
     public readonly tei: Document;
     public readonly spine: Spine;
 
-    private constructor(edition: Edition, chunkNumber: number, tei: Document, spine: Document) {
+    private constructor(edition: Edition, chunkNumber: number, tei: Document, spine: Spine) {
         this.edition = edition;
         this.chunkNumber = chunkNumber;
         this.tei = tei;
@@ -37,7 +38,10 @@ export class Chunk {
     }
 
     public static async load(edition: Edition, chunkNumber: number) {
-        const document = await edition.getXML();
+        const document = await edition.getXML(chunkNumber);
         const spine = await FvStore.getSpine(chunkNumber);
+        await spine.initialize();
+
+        return new Chunk(edition, chunkNumber, document, spine);
     }
 }

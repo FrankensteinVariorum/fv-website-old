@@ -2,30 +2,35 @@ import React from 'react';
 import EditionSelector from '../EditionSelector/EditionSelector';
 import TeiRendering from '../TeiRendering/TeiRendering';
 import FvStore from '../../data/store';
-import { Edition } from '../../data/types';
+import { Edition, Chunk } from '../../data/types';
+import { Spine } from '../../data/spine';
 
 interface ViewerProperties { }
 
 interface ViewerState {
-    xml?: XMLDocument;
+    loading: boolean,
+    chunk?: Chunk,
 }
 
 class Viewer extends React.Component <ViewerProperties, ViewerState> {
 
     state = {
-        xml: undefined,
+        loading: false,
+        chunk: undefined as Chunk | undefined,
     }
 
-    onNewChunk = async (edition: Edition, chunk: number) => {
-        const doc = await edition.getXML(chunk);
-        this.setState( {xml: doc} );
+    onNewChunk = async (edition: Edition, chunkNumber: number) => {
+        this.setState( {loading: true, chunk: undefined } );
+        
+        const chunk = await Chunk.load(edition, chunkNumber);
+        this.setState( {loading: false, chunk } );
     }    
 
     render() {
         return (
             <div>
                 <EditionSelector editions={FvStore.editions} onChunkSelected={this.onNewChunk} />
-                { this.state.xml ? <TeiRendering xml={this.state.xml!} /> : '' }
+                { this.state.chunk ? <TeiRendering xml={this.state.chunk.tei} /> : '' }
             </div>
 
         );

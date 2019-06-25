@@ -1,7 +1,8 @@
 
-abstract class PointerProcessor {
-    constructor(protected source: Document) {
-        this.source = source;
+export const dummy = 1;  // Just so the file isn't totally empty
+
+/* abstract class PointerProcessor {
+    protected constructor(protected xml: Document) {
     }
 
     protected evaluateXPath(xpath: string): Node[] {
@@ -17,11 +18,15 @@ abstract class PointerProcessor {
     
         return nodes;
     }
-    
-    abstract public dereference(): Node[];
-}
 
-export class PointerToIdProcessor extends PointerProcessor {
+    public async create(ptr: Element): PointerProcessor {
+
+    }
+
+    public abstract dereference(): Node[];
+} 
+
+class PointerToIdProcessor extends PointerProcessor {
     constructor(source: Document, private id: string) {
         super(source);
     }
@@ -30,11 +35,14 @@ export class PointerToIdProcessor extends PointerProcessor {
         const xpath = `//*[@xml:id="${this.id}"]`;
         const idResults = this.evaluateXPath(xpath);
     
+        if (idResults.length === 0) {
+            console.error(`Pointer ${this.id} references an invalid element`);
+        }
         return idResults;
     }
 }
-
-export class PointerToStringRangeProcessor extends PointerProcessor {
+*/
+/* export class PointerToStringRangeProcessor extends PointerProcessor {
     private xpath: string;
     private start: number;
     private length: number;
@@ -44,10 +52,30 @@ export class PointerToStringRangeProcessor extends PointerProcessor {
 
         const re = /$string-range\((.+),(\d+),(\d+)\)^/;
         const match = expr.match(re);
-
-        if (!expr.startsWith('string-range('))
     }
+} */
+/*
+export function parsePointer(ptr: Element): PointerProcessor {
+    if (ptr.tagName !== 'ptr') {
+        throw new Error(`parsePointer received element <${ptr.tagName}> and not <ptr>`);
+    }
+
+    const attr = ptr.attributes.getNamedItem('target');
+    if (!attr) {
+        throw new Error(`ptr ${ptr} has no target attribute`);
+    }
+    const target = attr.value;
+
+    const parts = target.split('#')
+    if (parts.length !== 2) {
+        throw new Error(`Target ${target} is not well formatted. Expected uri#expr`);
+    }
+
+    const uri = parts[0];
+
+
 }
+*/
 /*
 public async dereferencePointers() {
     const ptrElements = Array.from(this._collationDoc.getElementsByTagName('ptr'));
