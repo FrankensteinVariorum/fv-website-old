@@ -54,11 +54,17 @@ export class Chunk {
         this.root = edition.getRootElement(tei);
     }
 
-    public static async load(edition: Edition, chunkNumber: number) {
+    public static async load(edition: Edition, chunkNumber: number): Promise<Chunk> {
         const document = await edition.getXML(chunkNumber);
         const spine = await FvStore.getSpine(chunkNumber);
         await spine.initialize();
 
-        return new Chunk(edition, chunkNumber, document, spine);
+        const chunk = new Chunk(edition, chunkNumber, document, spine);
+        chunk.addAppReferences();
+
+        return chunk;
+    }
+
+    private addAppReferences() {
     }
 }

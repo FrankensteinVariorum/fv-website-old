@@ -1,5 +1,5 @@
 import XmlCache from "./xml-cache";
-import { Edition, EditionWithBody, MSEdition } from "./types";
+import { Edition, EditionWithBody, MSEdition } from "./edition";
 import { Spine } from "./spine";
 
 /*

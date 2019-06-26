@@ -1,4 +1,4 @@
-import { fetchXML, parseXML, evaluateXPath } from "./helpers";
+/*import { fetchXML, parseXML, evaluateXPath } from "./helpers";
 
 interface Pointer {
     node: ChildNode,
@@ -117,4 +117,6 @@ export function collateFromElement(id: string): CollationGathering {
     const xml = elem.innerHTML;
     const doc = parseXML(xml);
     return new CollationGathering(doc);
-}
+} */
+
+export const dummy = 1;

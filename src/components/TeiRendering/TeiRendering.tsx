@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { TeiConverter } from '../../tei-processing/tei-converter';
-import { Chunk } from '../../data/types';
+import { Chunk } from '../../data/edition';
 
 interface TeiRenderingData {
     chunk: Chunk;

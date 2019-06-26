@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import './EditionSelector.css';
-import { Edition } from '../../data/types';
+import { Edition } from '../../data/edition';
 import FvStore from '../../data/store';
 
 interface SelectOption {

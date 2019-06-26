@@ -1,11 +1,15 @@
 import FvStore from "./store";
-import { Edition } from "./types";
+import { Edition } from "./edition";
+import { evaluateXPath, findElementByXmlId } from "../tei-processing/helpers";
 
 interface PointerData {
-    element: Element;
+    ptrElement: Element;
     groupId: string;
     edition: Edition;
-    // pointer: PointerProcessor;
+    referencedUrl: string;
+    referencedTarget: string;
+
+    dereferenced?: Element;
 }
 
 export class Apparatus {  // Content of the <app> tag
@@ -13,7 +17,7 @@ export class Apparatus {  // Content of the <app> tag
     public readonly n: number | undefined;
     public readonly element: Element;
 
-    public readonly pointers: PointerData[];
+    public pointers: PointerData[];
 
     constructor(element: Element) {
         this.element = element;
@@ -28,8 +32,6 @@ export class Apparatus {  // Content of the <app> tag
         this.n = nAttr ? parseInt(nAttr.value) : undefined;
 
         this.pointers = this.parsePointers();
-
-        console.log(`Created Apparatus id ${this.id}, n ${this.n}, ${this.pointers.length} pointers`);
     }
 
     private parsePointers() {
@@ -39,7 +41,7 @@ export class Apparatus {  // Content of the <app> tag
         return ptrs;
     }
 
-    private parsePointer(ptrElement: Element) {
+    private parsePointer(ptrElement: Element): PointerData {
         const rdgElement = ptrElement.parentNode as Element;
         if (!rdgElement || rdgElement.tagName !== 'rdg') {
             throw new Error(`Parent of <ptr> is not <rdg>`);
@@ -66,12 +68,30 @@ export class Apparatus {  // Content of the <app> tag
         }
         const groupId = grpIdAttr.value;
 
+        const targetAttr = ptrElement.attributes.getNamedItem('target');
+        if (!targetAttr) {
+            throw new Error(`<ptr> element has not target attribute`);
+        }
+
+        const parts = targetAttr.value.split('#')
+        if (parts.length !== 2) {
+            throw new Error(`Target ${targetAttr.value} is not well formatted. Expected uri#xpath`);
+        }
+
         return {
-            element: ptrElement,
+            ptrElement,
             edition,
-            groupId
+            groupId,
+            referencedUrl: parts[0],
+            referencedTarget: parts[1],
         };
     }
+}
+
+interface StringRange {
+    xpath: string,
+    start: number,
+    length: number,
 }
 
 
@@ -80,6 +100,7 @@ export class Spine {
     private _apps: Apparatus[] | undefined;
     private _xml: Document | undefined;
     private _initialized = false;
+    private static mockElementCount = 0;
     
     constructor(chunk: number) {
         this.chunkNumber = chunk;
@@ -92,6 +113,11 @@ export class Spine {
 
         this._xml = await this.getXML();
         await this.parseApps();
+        await this.fetchAllReferences();
+        await this.rewriteStringRanges();
+        await this.dereferencePointers();
+        this.addBackPointers();
+        
         this._initialized = true;
     }
 
@@ -116,6 +142,115 @@ export class Spine {
         if (!this._apps) {
             throw new Error(`Spine not initialized yet`);
         }
-        return this.apps;
+        return this._apps;
     }
+
+    // Download all referenced XMLs concurrently (if they're not cached)
+    private async fetchAllReferences() {
+        console.debug(`Fetching all URLs referenced by chunk ${this.chunkNumber}`);
+
+        let allUrls = [] as string[];
+
+        for(let app of this.apps) {
+            const urls = app.pointers.map((ptr) => ptr.referencedUrl);
+            allUrls = allUrls.concat(urls);
+        }
+
+        const unique = Array.from(new Set<string>(allUrls));
+        const promises = unique.map((url) => FvStore.cache.getXML(url));
+        await Promise.all(promises);  // Returns only once all URLs have been fetched
+    }
+
+    // Rewrite string ranges to ordinary pointers. 
+    // This is done by adding tags in the target XML with their own ID surrounding the relevant text elements
+
+    private async rewriteStringRanges() {
+        const re = /^string-range\((?<xpath>.+),(?<start>\d+),(?<length>\d+)\)$/;
+        
+        for(let app of this.apps) {
+            const invalidPointers = new Set<PointerData>();
+            for(let ptr of app.pointers) {
+                const match = ptr.referencedTarget.match(re);
+                if (match) {
+                    const stringRange = {
+                        xpath: match.groups!.xpath,
+                        start: parseInt(match.groups!.start),
+                        length: parseInt(match.groups!.length),
+                    };
+                    try {
+                        await this.rewriteStringRange(ptr, stringRange);
+                    } catch(err) {
+                        invalidPointers.add(ptr);
+                    }
+                }
+            }
+
+            const validPointers = app.pointers.filter((ptr) => !invalidPointers.has(ptr));
+            app.pointers = validPointers;
+        }
+    }
+
+    private async rewriteStringRange(ptr: PointerData, range: StringRange) {
+        // For now - just get the xml:id of the target element and replace the pointer's target.
+        // Add an xml:id if none exists on the target element
+        const targetDoc = await FvStore.cache.getXML(ptr.referencedUrl);
+
+        // The xpath has a bug - it references the 'tei' namespace which is not defined in the spine files - 
+        // the default namespace is the tei namespace there. So we just drop all 'tei:' from the xpath
+        const patchedXPath = range.xpath.replace(/tei:/g, '');
+        const targetNodes = evaluateXPath(targetDoc, patchedXPath);
+
+        if (targetNodes.length === 0) {
+            console.error(`string-range for xpath ${patchedXPath} failed to return a node`);
+            throw Error('string-range returned no nodes');
+        }
+
+        if (targetNodes.length > 1) {
+            console.error(`string-range for xpath ${patchedXPath} returned more than one node`);
+            throw Error('string-range returned more than one node');
+        }
+
+        const targetElement = targetNodes[0] as Element;
+        const idAttr = targetElement.attributes.getNamedItem('xml:id');
+        let xmlId = '';
+        if (idAttr) {
+            xmlId = idAttr.value;
+        } else {
+            xmlId = `mock-id-${Spine.mockElementCount}`;
+            Spine.mockElementCount += 1;
+
+            // No xml:id - add a mock one
+
+            targetElement.setAttribute('xml:id', xmlId);
+        }
+
+        // Update the Pointer
+        ptr.referencedTarget = xmlId;  // In memory
+        ptr.ptrElement.setAttribute('target', `${ptr.referencedTarget}#${xmlId}`); // In the DOM
+    }
+
+    private async dereferencePointers() {
+        for(let app of this.apps) {
+            for(let ptr of app.pointers) {
+                const document = await FvStore.cache.getXML(ptr.referencedUrl);
+                const element = findElementByXmlId(document, ptr.referencedTarget);
+                ptr.dereferenced = element;
+            }
+        }
+    }
+
+    private addBackPointers() {
+        // We will add the back pointers to all editions while we're at it
+        // Backpointers are an attribute - app-ref, which contains the id of the app element
+        for(let app of this.apps) {
+            for(let ptr of app.pointers) {
+                if (!ptr.dereferenced) {
+                    console.error('Non dereferenced pointed in addBackPointers - pointers should all be dereferenced by now');
+                    continue;
+                }
+                ptr.dereferenced!.setAttribute('app-ref', app.id);
+            }
+        }
+    }
+
 }

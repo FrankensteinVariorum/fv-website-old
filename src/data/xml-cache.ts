@@ -1,5 +1,8 @@
 // This class holds a cache of XML documents, fetching them from the web if they are not there
 // Every piece of code uses this, so that we can load XMLs again and again without worried about performance
+//
+// NOTE: The cache contains parsed Documents. If you change the document, it's going to be changed everywhere.
+// This is on purpose - as we add attributes and tags for pointer resolution.
 
 export default class XmlCache {
     private  _xmls : Map<string, Document>;  // Map from URL to a parsed XML
@@ -32,5 +35,4 @@ export default class XmlCache {
 
         return doc
     }
-    
 }

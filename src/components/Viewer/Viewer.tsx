@@ -2,7 +2,7 @@ import React from 'react';
 import EditionSelector from '../EditionSelector/EditionSelector';
 import TeiRendering from '../TeiRendering/TeiRendering';
 import FvStore from '../../data/store';
-import { Edition, Chunk } from '../../data/types';
+import { Edition, Chunk } from '../../data/edition';
 import { Spine } from '../../data/spine';
 
 interface ViewerProperties { }
