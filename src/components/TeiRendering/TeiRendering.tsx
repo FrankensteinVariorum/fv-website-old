@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react';
 import { TeiConverter } from '../../tei-processing/tei-converter';
+import { Chunk } from '../../data/types';
 
 interface TeiRenderingData {
-    xml: XMLDocument;
+    chunk: Chunk;
 }
 
 interface TeiRenderingState {
@@ -27,7 +28,7 @@ class TeiRendering extends React.Component<TeiRenderingData, TeiRenderingState> 
     }
 
     getTeiObjects = () => {
-        const body = this.props.xml.getElementsByTagName('body')[0];
+        const body = this.props.chunk.root;
     
         const converter = new TeiConverter();
         const reactElement = converter.teiToReactElement(body, 0);

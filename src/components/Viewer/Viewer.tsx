@@ -30,7 +30,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         return (
             <div>
                 <EditionSelector editions={FvStore.editions} onChunkSelected={this.onNewChunk} />
-                { this.state.chunk ? <TeiRendering xml={this.state.chunk.tei} /> : '' }
+                { this.state.chunk ? <TeiRendering chunk={this.state.chunk} /> : '' }
             </div>
 
         );
