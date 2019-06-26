@@ -65,6 +65,14 @@ export class Chunk {
         return chunk;
     }
 
+    public getApp(appRef: string) {
+        const app = this.variations.apps.find((a) => a.id === appRef);
+        if(!app) {
+            throw new Error(`Can't locate app ${appRef}`);
+        }
+        return app;
+    }
+
     private addAppReferences() {
     }
 }

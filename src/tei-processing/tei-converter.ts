@@ -5,8 +5,17 @@ import TeiReactElement from '../tei-components/TeiReactElement';
 import TeiReactText from '../tei-components/TeiReactText';
 
 export class TeiConverter {
-    private static TeiReactElement = TeiReactElement;
     private static index = 0;
+
+    private getHtmlTag(teiTag: string) {
+        if (teiTag === 'p') {
+            return 'p';
+        } else if (teiTag === 'head') {
+            return 'h3';
+        }
+
+        return undefined;
+    }
 
     private buildProperties(node: Node): any {
         const nodeAttributes = (node as any).attributes;
@@ -39,7 +48,7 @@ export class TeiConverter {
                         childElement = React.createElement(TeiReactText, {
                             x_depth: depth + 1,
                             text: childNode.textContent || '',
-                            key: i,
+                            key: TeiConverter.index++,
                         });
                     }
                 } else {
@@ -59,14 +68,14 @@ export class TeiConverter {
         var props: any = {
             tag: node.nodeName,
             key: TeiConverter.index++,
-            x_depth: depth,
+            htmlTag: this.getHtmlTag(node.nodeName),
             teiProps: valueComponent
         };
         if (valueComponent.id) {
             props['id'] = valueComponent.id;
         }
 
-        const reactElement = React.createElement(TeiConverter.TeiReactElement, props, reactChildren); // Pass children
+        const reactElement = React.createElement(TeiReactElement, props, reactChildren); // Pass children
 
         return reactElement;
     }

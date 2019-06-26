@@ -1,7 +1,9 @@
 import React from 'react';
 
-interface TeiReactElementProps {
+// TODO: Drop x_dept, add chunk
+export interface TeiReactElementProps {
    x_depth: number;   
+   htmlTag?: string;
    tag: string;
    id?: string;
    teiProps: any;
@@ -10,21 +12,26 @@ interface TeiReactElementProps {
 class TeiReactElement extends React.Component<TeiReactElementProps> {
      
    render() {
-      const indent = ' '.repeat(this.props.x_depth * 2);
+      let tag = '';
+      let closingTag = '';
 
-      const tag = `<${this.props.tag}>`;
-      const closeTag = `</${this.props.tag}>`;
+      if(this.props.htmlTag) {
+         tag = `<${this.props.htmlTag}>`;
+         closingTag = `</${this.props.htmlTag}>`;
+      }
       const appRef = this.props.teiProps['app-ref'];  // This can be undefined
+      // const app = appRef ? this.props.chunk.getApp(appRef) : undefined;
 
+      // TODO: Use react-html-parser
       return (
          <div className={`tei-element tei-${this.props.tag}`} data-tei-tag={`${this.props.tag}`}>
-            { appRef ? <pre><h4>Reference ${appRef} </h4></pre> : '' }
-            <pre>{indent}{tag}</pre>
+            {tag}
             {this.props.children}
-            <pre>{indent}{closeTag}</pre>
+            {closingTag}
          </div>
       );
    }
 }
 
 export default TeiReactElement;
+
