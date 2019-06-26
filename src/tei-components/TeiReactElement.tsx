@@ -16,10 +16,6 @@ class TeiReactElement extends React.Component<TeiReactElementProps> {
       const closeTag = `</${this.props.tag}>`;
       const appRef = this.props.teiProps['app-ref'];  // This can be undefined
 
-      if (appRef) {
-         console.log('Got app-ref!');
-      }
-      
       return (
          <div className={`tei-element tei-${this.props.tag}`} data-tei-tag={`${this.props.tag}`}>
             { appRef ? <pre><h4>Reference ${appRef} </h4></pre> : '' }

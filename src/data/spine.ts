@@ -147,8 +147,6 @@ export class Spine {
 
     // Download all referenced XMLs concurrently (if they're not cached)
     private async fetchAllReferences() {
-        console.debug(`Fetching all URLs referenced by chunk ${this.chunkNumber}`);
-
         let allUrls = [] as string[];
 
         for(let app of this.apps) {
@@ -231,11 +229,21 @@ export class Spine {
 
     private async dereferencePointers() {
         for(let app of this.apps) {
+            const invalidPointers = new Set<PointerData>();
+
             for(let ptr of app.pointers) {
                 const document = await FvStore.cache.getXML(ptr.referencedUrl);
-                const element = findElementByXmlId(document, ptr.referencedTarget);
-                ptr.dereferenced = element;
+                try {
+                    const element = findElementByXmlId(document, ptr.referencedTarget);
+                    ptr.dereferenced = element;
+                } catch(err) {
+                    console.error(`Pointer ${ptr.ptrElement.outerHTML} is invalid`);
+                    invalidPointers.add(ptr);
+                }
             }
+
+            const validPointers = app.pointers.filter((ptr) => !invalidPointers.has(ptr));
+            app.pointers = validPointers
         }
     }
 

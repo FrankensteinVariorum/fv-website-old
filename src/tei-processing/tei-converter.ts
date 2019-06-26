@@ -39,6 +39,7 @@ export class TeiConverter {
                         childElement = React.createElement(TeiReactText, {
                             x_depth: depth + 1,
                             text: childNode.textContent || '',
+                            key: i,
                         });
                     }
                 } else {
