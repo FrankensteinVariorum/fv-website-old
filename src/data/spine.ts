@@ -118,6 +118,11 @@ export class Apparatus {  // Content of the <app> tag
 
         return groups;
     }
+
+    public getOtherGroups(ed: Edition) {
+        // Returns all the groups besides the one that holds this edition
+        return this.groups.filter((grp) => grp.editions.indexOf(ed) === -1);
+    }
 }
 
 interface StringRange {
