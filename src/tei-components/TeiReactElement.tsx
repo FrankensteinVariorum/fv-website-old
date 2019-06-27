@@ -1,12 +1,13 @@
 import React from 'react';
+import ReactHtmlParser from 'react-html-parser';
+import { Chunk } from '../data/edition';
 
-// TODO: Drop x_dept, add chunk
 export interface TeiReactElementProps {
-   x_depth: number;   
    htmlTag?: string;
    tag: string;
    id?: string;
    teiProps: any;
+   chunk: Chunk;
 }
 
 class TeiReactElement extends React.Component<TeiReactElementProps> {
@@ -19,15 +20,20 @@ class TeiReactElement extends React.Component<TeiReactElementProps> {
          tag = `<${this.props.htmlTag}>`;
          closingTag = `</${this.props.htmlTag}>`;
       }
-      const appRef = this.props.teiProps['app-ref'];  // This can be undefined
+      // const appRef = this.props.teiProps['app-ref'];  // This can be undefined
       // const app = appRef ? this.props.chunk.getApp(appRef) : undefined;
 
-      // TODO: Use react-html-parser
+      // let children = this.props.children;
+      // if (app) {
+      //    children = React.createElement(TeiAppWrapper, {appChildren: this.props.children});
+      // }
+
       return (
-         <div className={`tei-element tei-${this.props.tag}`} data-tei-tag={`${this.props.tag}`}>
-            {tag}
+         <div className={`tei-element tei-${this.props.tag}`} data-tei-tag={this.props.tag}>
+             {/* data-app-ref={appRef}> */}
+            {ReactHtmlParser(tag)}
             {this.props.children}
-            {closingTag}
+            {ReactHtmlParser(closingTag)}
          </div>
       );
    }

@@ -3,6 +3,8 @@
 import React, { ReactNode } from 'react';
 import TeiReactElement from '../tei-components/TeiReactElement';
 import TeiReactText from '../tei-components/TeiReactText';
+import { Chunk } from '../data/edition';
+import TeiAppWrapper from '../tei-components/TeiAppWrapper';
 
 export class TeiConverter {
     private static index = 0;
@@ -32,7 +34,7 @@ export class TeiConverter {
         return valueProps;
     }
 
-    public teiToReactElement(node: Node, depth: number): ReactNode {  // Returns a single React element
+    public teiToReactElement(node: Node, chunk: Chunk): ReactNode {  // Returns a single React element
         const reactChildren: ReactNode[] = [];
         // create elements for all children
         if (node.hasChildNodes()) {
@@ -40,13 +42,12 @@ export class TeiConverter {
                 const childNode = node.childNodes[i];
                 let childElement: ReactNode = undefined;
                 if (childNode.nodeType === 1) {
-                    childElement = this.teiToReactElement(childNode, depth + 1);
+                    childElement = this.teiToReactElement(childNode, chunk);
                 } else if (childNode.nodeType === 3) {
                     let text = childNode.textContent || '';
                     text = text.trim();
                     if (text) {
                         childElement = React.createElement(TeiReactText, {
-                            x_depth: depth + 1,
                             text: childNode.textContent || '',
                             key: TeiConverter.index++,
                         });
@@ -69,14 +70,22 @@ export class TeiConverter {
             tag: node.nodeName,
             key: TeiConverter.index++,
             htmlTag: this.getHtmlTag(node.nodeName),
-            teiProps: valueComponent
+            teiProps: valueComponent,
+            chunk
         };
         if (valueComponent.id) {
             props['id'] = valueComponent.id;
         }
 
-        const reactElement = React.createElement(TeiReactElement, props, reactChildren); // Pass children
+        let reactElement: ReactNode = React.createElement(TeiReactElement, props, reactChildren); // Pass children
 
+        // If node has app-ref, get app, create:
+        const appRef = valueComponent['app-ref'];  // This can be undefined
+        const app = appRef ? props.chunk.getApp(appRef) : undefined;
+        
+        if (app) {
+            reactElement = React.createElement(TeiAppWrapper, {key: TeiConverter.index++}, [reactElement])
+        }
         return reactElement;
     }
 }

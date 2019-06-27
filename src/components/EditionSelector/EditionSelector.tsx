@@ -4,14 +4,20 @@ import './EditionSelector.css';
 import { Edition } from '../../data/edition';
 import FvStore from '../../data/store';
 
-interface SelectOption {
+export interface SelectOption {
     value: string;
     label: string;
 }
 
 interface EditionSelectorProps {
     editions: Edition[],
-    onChunkSelected: (edition: Edition, chunk: number) => void;
+    edition: Edition,
+    showVariation: boolean,
+    showText: boolean,
+
+    onEditionSelected: (edition: Edition) => void;
+    onVariationChanged: (variation: boolean) => void;
+    onTextChanged: (text: boolean) => void;
 }
 
 interface EditionSelectorState {
@@ -35,8 +41,6 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
             console.warn('Load clicked with no edition or chunk');
             return;
         }
-
-        this.props.onChunkSelected(this.state.edition, this.state.chunk);;
     }
 
     componentDidMount = () => {
@@ -52,13 +56,19 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
             return;
         }
 
-        const chunks = edition.chunks.map((c) => ({ value: c.toString(), label: c.toString() } as SelectOption));
-        this.setState( { edition, availableChunks: chunks, });
+        // const chunks = edition.chunks.map((c) => ({ value: c.toString(), label: c.toString() } as SelectOption));
+        // this.setState( { edition, availableChunks: chunks, });
+
+        this.props.onEditionSelected(edition);
     }
 
-    chunkChanged = (selectedOption: SelectOption) => {
-        const chunk = parseInt(selectedOption.value);
-        this.setState({ chunk: chunk });
+    onVariationChanged = (variation: any) => {
+        debugger
+        this.props.onVariationChanged(variation);
+    }
+    
+    onTextChanged = (text: any) => {
+        this.props.onTextChanged(text);
     }
     
     render() {
@@ -71,12 +81,23 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
                 options={this.state.availableEditions}
             ></Select>
 
-            <label>Chunk</label>
-            <Select
-                className='select-style'
-                onChange={this.chunkChanged}
-                options={this.state.availableChunks}
-            />
+            <label>
+                Show Variations
+                <input
+                    name="variation"
+                    type="checkbox"
+                    checked={this.props.showVariation}
+                    onChange={()=>this.onVariationChanged} />
+            </label>
+            
+            <label>
+                Show Text
+                <input
+                    name="text"
+                    type="checkbox"
+                    checked={this.props.showText}
+                    onChange={this.onTextChanged} />
+            </label>
 
             <button onClick={this.load}>Load</button>
             <hr />
