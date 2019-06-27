@@ -1,6 +1,7 @@
 import FvStore from "./store";
 import { Edition } from "./edition";
 import { evaluateXPath, findElementByXmlId } from "../tei-processing/helpers";
+import { string } from "prop-types";
 
 interface PointerData {
     ptrElement: Element;
@@ -12,12 +13,18 @@ interface PointerData {
     dereferenced?: Element;
 }
 
+interface ReadingGroup {
+    groupId: string;
+    editions: Edition[];
+}
+
 export class Apparatus {  // Content of the <app> tag
     public readonly id: string;
     public readonly n: number | undefined;
     public readonly element: Element;
 
     public pointers: PointerData[];
+    public groups: ReadingGroup[];
 
     constructor(element: Element) {
         this.element = element;
@@ -32,6 +39,7 @@ export class Apparatus {  // Content of the <app> tag
         this.n = nAttr ? parseInt(nAttr.value) : undefined;
 
         this.pointers = this.parsePointers();
+        this.groups = this.buildGroups();
     }
 
     private parsePointers() {
@@ -85,6 +93,30 @@ export class Apparatus {  // Content of the <app> tag
             referencedUrl: parts[0],
             referencedTarget: parts[1],
         };
+    }
+
+    private buildGroups(): ReadingGroup[] {
+        const map = new Map<string, Set<Edition>>(); // Map from edition to groupId
+        const groups = [] as ReadingGroup[];
+
+        for(let ptr of this.pointers) {
+            if(!map.has(ptr.groupId)) {
+                map.set(ptr.groupId, new Set<Edition>());
+            }
+            map.get(ptr.groupId)!.add(ptr.edition);
+        }
+
+        // Now turn the the map into ReadingGroups
+        for(let groupId of map.keys()) {
+            const editions = map.get(groupId)!;
+            const readingGroup = {
+                groupId,
+                editions: Array.from(editions),
+            };
+            groups.push(readingGroup);
+        }
+
+        return groups;
     }
 }
 
