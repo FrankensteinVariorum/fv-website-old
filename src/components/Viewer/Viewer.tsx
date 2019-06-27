@@ -11,6 +11,8 @@ interface ViewerState {
     loading: boolean,
     chunk?: Chunk,
     edition?: Edition,
+    showVariations: boolean,
+    showText: boolean,
 }
 
 class Viewer extends React.Component <ViewerProperties, ViewerState> {
@@ -21,7 +23,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         edition: undefined as Edition | undefined,
         chunkNumber: 0,
 
-        showVariations: false,
+        showVariations: true,
         showText: false,
     }
 
@@ -39,12 +41,11 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     onNewEdition = (edition: Edition) => {
         this.setState( {edition } );
     }
-    onVariation = (variation: boolean) => {
-        debugger
-        // this.setState( {showVariations: variation} );
+    onVariation = (show: boolean) => {
+        this.setState( { showVariations: show } );
     }
-    onText = (text: boolean) => {
-        // this.setState( {showText: text } );
+    onText = (show: boolean) => {
+        this.setState( { showText: show } );
     }
 
     render() {
@@ -53,7 +54,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                 <EditionSelector 
                 editions={FvStore.editions} 
                 edition={this.state.edition!}
-                showVariation={this.state.showVariations}
+                showVariations={this.state.showVariations}
                 showText={this.state.showText}
                 onEditionSelected={this.onNewEdition}
                 onVariationChanged={this.onVariation}

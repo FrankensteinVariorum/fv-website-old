@@ -12,7 +12,7 @@ export interface SelectOption {
 interface EditionSelectorProps {
     editions: Edition[],
     edition: Edition,
-    showVariation: boolean,
+    showVariations: boolean,
     showText: boolean,
 
     onEditionSelected: (edition: Edition) => void;
@@ -22,31 +22,34 @@ interface EditionSelectorProps {
 
 interface EditionSelectorState {
     availableEditions: SelectOption[],
-    availableChunks: SelectOption[],
     edition: Edition | undefined,
-    chunk: number | undefined,
+    showVariations: boolean,
+    showText: boolean,
 }
 
 class EditionSelector extends React.Component<EditionSelectorProps, EditionSelectorState> {
 
     state = {
         availableEditions: [] as SelectOption[],
-        availableChunks: [] as SelectOption[],
         edition: undefined as Edition | undefined,
-        chunk: undefined as number | undefined,
+        showVariations: true,
+        showText: true,
     }
     
-    load = async () => {
-        if (!this.state.edition || !this.state.chunk) {
-            console.warn('Load clicked with no edition or chunk');
-            return;
-        }
-    }
-
     componentDidMount = () => {
         const editions = FvStore.editions.map((ed) => ({ value: ed.code, label: ed.name } as SelectOption));
 
-        this.setState({ availableEditions: editions, availableChunks: [], });
+        this.setState({ availableEditions: editions, });
+    }
+
+    componentDidUpdate(prevProps: EditionSelectorProps) {
+        if (this.props.showVariations !== this.state.showVariations) {
+            this.setState( { showVariations: this.props.showVariations });
+        }
+
+        if(this.props.showText !== this.state.showText) {
+            this.setState( { showText: this.props.showText });
+        }
     }
 
     editionChanged = (selectedOption: SelectOption) => {
@@ -56,19 +59,19 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
             return;
         }
 
-        // const chunks = edition.chunks.map((c) => ({ value: c.toString(), label: c.toString() } as SelectOption));
-        // this.setState( { edition, availableChunks: chunks, });
-
         this.props.onEditionSelected(edition);
     }
 
-    onVariationChanged = (variation: any) => {
-        debugger
-        this.props.onVariationChanged(variation);
+    onVariationChanged = () => {
+        const newShow = !this.state.showVariations;
+        this.setState( { showVariations: newShow });
+        this.props.onVariationChanged(newShow);
     }
     
-    onTextChanged = (text: any) => {
-        this.props.onTextChanged(text);
+    onTextChanged = () => {
+        const newShowText = !this.state.showText;
+        this.setState( { showText: newShowText });
+        this.props.onTextChanged(newShowText);
     }
     
     render() {
@@ -82,24 +85,22 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
             ></Select>
 
             <label>
-                Show Variations
                 <input
                     name="variation"
                     type="checkbox"
-                    checked={this.props.showVariation}
-                    onChange={()=>this.onVariationChanged} />
+                    checked={this.state.showVariations}
+                    onChange={this.onVariationChanged} />
+                Show Variations
             </label>
             
             <label>
-                Show Text
                 <input
                     name="text"
                     type="checkbox"
-                    checked={this.props.showText}
+                    checked={this.state.showText}
                     onChange={this.onTextChanged} />
+                Show Text
             </label>
-
-            <button onClick={this.load}>Load</button>
             <hr />
         </div>
         );
