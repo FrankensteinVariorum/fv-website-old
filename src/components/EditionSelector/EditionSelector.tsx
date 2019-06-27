@@ -4,45 +4,52 @@ import './EditionSelector.css';
 import { Edition } from '../../data/edition';
 import FvStore from '../../data/store';
 
-interface SelectOption {
+export interface SelectOption {
     value: string;
     label: string;
 }
 
 interface EditionSelectorProps {
     editions: Edition[],
-    onChunkSelected: (edition: Edition, chunk: number) => void;
+    edition: Edition,
+    showVariations: boolean,
+    showText: boolean,
+
+    onEditionSelected: (edition: Edition) => void;
+    onVariationChanged: (variation: boolean) => void;
+    onTextChanged: (text: boolean) => void;
 }
 
 interface EditionSelectorState {
     availableEditions: SelectOption[],
-    availableChunks: SelectOption[],
     edition: Edition | undefined,
-    chunk: number | undefined,
+    showVariations: boolean,
+    showText: boolean,
 }
 
 class EditionSelector extends React.Component<EditionSelectorProps, EditionSelectorState> {
 
     state = {
         availableEditions: [] as SelectOption[],
-        availableChunks: [] as SelectOption[],
         edition: undefined as Edition | undefined,
-        chunk: undefined as number | undefined,
+        showVariations: true,
+        showText: true,
     }
     
-    load = async () => {
-        if (!this.state.edition || !this.state.chunk) {
-            console.warn('Load clicked with no edition or chunk');
-            return;
-        }
-
-        this.props.onChunkSelected(this.state.edition, this.state.chunk);;
-    }
-
     componentDidMount = () => {
         const editions = FvStore.editions.map((ed) => ({ value: ed.code, label: ed.name } as SelectOption));
 
-        this.setState({ availableEditions: editions, availableChunks: [], });
+        this.setState({ availableEditions: editions, });
+    }
+
+    componentDidUpdate(prevProps: EditionSelectorProps) {
+        if (this.props.showVariations !== this.state.showVariations) {
+            this.setState( { showVariations: this.props.showVariations });
+        }
+
+        if(this.props.showText !== this.state.showText) {
+            this.setState( { showText: this.props.showText });
+        }
     }
 
     editionChanged = (selectedOption: SelectOption) => {
@@ -52,13 +59,19 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
             return;
         }
 
-        const chunks = edition.chunks.map((c) => ({ value: c.toString(), label: c.toString() } as SelectOption));
-        this.setState( { edition, availableChunks: chunks, });
+        this.props.onEditionSelected(edition);
     }
 
-    chunkChanged = (selectedOption: SelectOption) => {
-        const chunk = parseInt(selectedOption.value);
-        this.setState({ chunk: chunk });
+    onVariationChanged = () => {
+        const newShow = !this.state.showVariations;
+        this.setState( { showVariations: newShow });
+        this.props.onVariationChanged(newShow);
+    }
+    
+    onTextChanged = () => {
+        const newShowText = !this.state.showText;
+        this.setState( { showText: newShowText });
+        this.props.onTextChanged(newShowText);
     }
     
     render() {
@@ -71,14 +84,23 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
                 options={this.state.availableEditions}
             ></Select>
 
-            <label>Chunk</label>
-            <Select
-                className='select-style'
-                onChange={this.chunkChanged}
-                options={this.state.availableChunks}
-            />
-
-            <button onClick={this.load}>Load</button>
+            <label>
+                <input
+                    name="variation"
+                    type="checkbox"
+                    checked={this.state.showVariations}
+                    onChange={this.onVariationChanged} />
+                Show Variations
+            </label>
+            
+            <label>
+                <input
+                    name="text"
+                    type="checkbox"
+                    checked={this.state.showText}
+                    onChange={this.onTextChanged} />
+                Show Text
+            </label>
             <hr />
         </div>
         );
