@@ -1,9 +1,12 @@
 import React, { ReactNode } from 'react';
 import { TeiConverter } from '../../tei-processing/tei-converter';
-import { Chunk } from '../../data/edition';
+import { Chunk, Edition } from '../../data/edition';
 
 interface TeiRenderingData {
     chunk: Chunk;
+    showVariations: boolean;
+    showText: boolean;
+    edition: Edition;
 }
 
 interface TeiRenderingState {
@@ -30,7 +33,7 @@ class TeiRendering extends React.Component<TeiRenderingData, TeiRenderingState> 
     getTeiObjects = () => {
         const body = this.props.chunk.root;
     
-        const converter = new TeiConverter();
+        const converter = new TeiConverter(this.props.showVariations, this.props.showText, this.props.edition);
         const reactElement = converter.teiToReactElement(body, this.props.chunk);
 
         this.setState( { processing: false, elements: [reactElement]});

@@ -3,11 +3,20 @@
 import React, { ReactNode } from 'react';
 import TeiReactElement from '../tei-components/TeiReactElement';
 import TeiReactText from '../tei-components/TeiReactText';
-import { Chunk } from '../data/edition';
+import { Chunk, Edition } from '../data/edition';
 import TeiAppWrapper from '../tei-components/TeiAppWrapper';
 
 export class TeiConverter {
     private static index = 0;
+    public showVariations = false;
+    public showText = false;
+    public edition = undefined as Edition | undefined;
+
+    constructor(variations: boolean, text: boolean, edition: Edition) {
+        this.showVariations = variations;
+        this.showText = text;
+        this.edition = edition;
+    }
 
     private getHtmlTag(teiTag: string) {
         if (teiTag === 'p') {
@@ -83,8 +92,13 @@ export class TeiConverter {
         const appRef = valueComponent['app-ref'];  // This can be undefined
         const app = appRef ? props.chunk.getApp(appRef) : undefined;
         
-        if (app) {
-            reactElement = React.createElement(TeiAppWrapper, {key: TeiConverter.index++}, [reactElement])
+        if (app && this.edition) {
+            reactElement = React.createElement(TeiAppWrapper, {key: TeiConverter.index++,
+                showVariations: this.showVariations,
+                showText: this.showText,
+                edition: this.edition,
+                app},
+            [reactElement])
         }
         return reactElement;
     }

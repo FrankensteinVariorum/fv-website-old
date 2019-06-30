@@ -64,7 +64,12 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                 edition={this.state.edition} 
                 chunk={this.state.chunkNumber}
                 onChunkSelected={this.onNewChunk} />
-                { this.state.chunk ? <TeiRendering chunk={this.state.chunk} /> : '' }
+                { this.state.chunk && this.state.edition ? 
+                <TeiRendering
+                chunk={this.state.chunk}
+                edition={this.state.edition}
+                showVariations={this.state.showVariations}
+                showText={this.state.showText} /> : '' }
             </div>
 
         );
