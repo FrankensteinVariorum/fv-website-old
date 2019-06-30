@@ -12,9 +12,52 @@ interface PointerData {
     dereferenced?: Element;
 }
 
-interface ReadingGroup {
-    groupId: string;
-    editions: Edition[];
+export class ReadingGroup {
+    public readonly groupId: string;
+    public readonly editions: Edition[];
+    public readonly apparatus: Apparatus;
+    public readonly element: Element;
+
+    private readonly pointers: PointerData[];
+
+    constructor(apparatus: Apparatus, groupId: string) {
+        this.groupId = groupId;
+        this.apparatus = apparatus;
+        this.editions = this.fillEditions();
+        this.pointers = this.fillPointers();
+        this.element = this.buildElement();
+    }
+
+    private fillEditions() {
+        const editions = [] as Edition[];
+        for (const ptr of this.apparatus.pointers) {
+            if (ptr.groupId === this.groupId && editions.indexOf(ptr.edition) === -1) {
+                editions.push(ptr.edition);
+            }
+        }
+
+        return editions;
+    }
+
+    private fillPointers() {
+        // Fill pointers for one of the editions in the group, as they are all identical
+        const edition = this.editions[0];
+        return this.apparatus.pointers.filter((ptr) => ptr.groupId === this.groupId && ptr.edition === edition);
+    }
+
+    private buildElement() {
+        // Build a new XML element that contains all the dereferenced pointers in this group
+        // We create a new document for each such element
+        const doc = document.implementation.createDocument(null, null, null);
+        const group = doc.createElement('rdgGrp');
+        const children = this.pointers.map((ptr) => ptr.dereferenced!);
+        for(const child of children) {
+            group.appendChild(child);
+        }
+        doc.appendChild(group);
+
+        return group;
+    }
 }
 
 export class Apparatus {  // Content of the <app> tag
@@ -23,7 +66,7 @@ export class Apparatus {  // Content of the <app> tag
     public readonly element: Element;
 
     public pointers: PointerData[];
-    public groups: ReadingGroup[];
+    private _groups: ReadingGroup[];
 
     constructor(element: Element) {
         this.element = element;
@@ -38,7 +81,14 @@ export class Apparatus {  // Content of the <app> tag
         this.n = nAttr ? parseInt(nAttr.value) : undefined;
 
         this.pointers = this.parsePointers();
-        this.groups = this.buildGroups();
+        this._groups = [];
+    }
+
+    public get groups() { return this._groups; }
+
+    public buildGroups() {
+        const groupSet = new Set<string>(this.pointers.map((ptr) => ptr.groupId));
+        this._groups = Array.from(groupSet).map((grp) => new ReadingGroup(this, grp));
     }
 
     private parsePointers() {
@@ -94,28 +144,9 @@ export class Apparatus {  // Content of the <app> tag
         };
     }
 
-    private buildGroups(): ReadingGroup[] {
-        const map = new Map<string, Set<Edition>>(); // Map from edition to groupId
-        const groups = [] as ReadingGroup[];
-
-        for(let ptr of this.pointers) {
-            if(!map.has(ptr.groupId)) {
-                map.set(ptr.groupId, new Set<Edition>());
-            }
-            map.get(ptr.groupId)!.add(ptr.edition);
-        }
-
-        // Now turn the the map into ReadingGroups
-        for(let groupId of map.keys()) {
-            const editions = map.get(groupId)!;
-            const readingGroup = {
-                groupId,
-                editions: Array.from(editions),
-            };
-            groups.push(readingGroup);
-        }
-
-        return groups;
+    public getOtherGroups(ed: Edition) {
+        // Returns all the groups besides the one that holds this edition
+        return this.groups.filter((grp) => grp.editions.indexOf(ed) === -1);
     }
 }
 
@@ -148,6 +179,7 @@ export class Spine {
         await this.rewriteStringRanges();
         await this.dereferencePointers();
         this.addBackPointers();
+        this.buildGroupsInApps();
         
         this._initialized = true;
     }
@@ -292,4 +324,10 @@ export class Spine {
         }
     }
 
+    private buildGroupsInApps() {
+        // Build the groups in all App objects
+        for(const app of this.apps) {
+            app.buildGroups();
+        }
+    }
 }
