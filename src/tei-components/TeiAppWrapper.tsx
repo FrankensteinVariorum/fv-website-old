@@ -1,16 +1,10 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
+import './TeiComponents.sass';
 
 class TeiAppWrapper extends React.Component {
-    style = {
-        backgroundColor: 'gray',
-        marginBottom: '10px',
-        border: '1px solid black'
-    }
-     
    render() {
-
       return (
-         <div style={this.style}>
+         <div className='app-wrapper'>
            {this.props.children}
          </div>
       );
