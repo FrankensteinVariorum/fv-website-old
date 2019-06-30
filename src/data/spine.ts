@@ -1,7 +1,6 @@
 import FvStore from "./store";
 import { Edition } from "./edition";
 import { evaluateXPath, findElementByXmlId } from "../tei-processing/helpers";
-import { string } from "prop-types";
 
 interface PointerData {
     ptrElement: Element;

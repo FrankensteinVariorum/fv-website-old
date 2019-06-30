@@ -4,3 +4,8 @@
     margin-left: 10px;
     margin-right: 15px;
 }
+
+button:disabled {
+opacity: 0.65; 
+cursor: not-allowed;
+}

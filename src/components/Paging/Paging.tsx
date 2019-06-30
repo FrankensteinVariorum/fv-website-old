@@ -2,7 +2,6 @@ import React from 'react';
 import { Edition } from '../../data/edition';
 import Select from 'react-select';
 import { SelectOption } from '../EditionSelector/EditionSelector';
-import { deflate } from 'zlib';
 
 
 interface PagingData {
@@ -12,17 +11,21 @@ interface PagingData {
 }
 
 interface PagingState {
-    chunk: number,
+    chunkIndex: number,
     selectedOption: SelectOption | undefined,
     availableChunks: SelectOption[],
+    disablePrev: boolean,
+    disableNext: boolean,
 }
 
 class Paging extends React.Component<PagingData, PagingState> {
 
     state = {
-        chunk: this.props.chunk,
+        chunkIndex: this.props.chunk,
         selectedOption: undefined as SelectOption | undefined,
-        availableChunks: [] as SelectOption[]
+        availableChunks: [] as SelectOption[],
+        disablePrev: true,
+        disableNext: false,
     }
 
     componentDidUpdate(prevProps: PagingData) {
@@ -31,7 +34,7 @@ class Paging extends React.Component<PagingData, PagingState> {
             if (this.props.edition) {
                 chunks = this.props.edition.chunks.map((c) => ({ value: c.toString(), label: c.toString() } as SelectOption));
                 const firstChunk = this.props.edition.chunks[0];
-                this.setState( { availableChunks: chunks, chunk: firstChunk, selectedOption: chunks[0] });
+                this.setState( { availableChunks: chunks, chunkIndex: 0, selectedOption: chunks[0] });
                 this.props.onChunkSelected(firstChunk);
             }
         }
@@ -39,14 +42,21 @@ class Paging extends React.Component<PagingData, PagingState> {
 
     onChunkChanged = (selectedOption: SelectOption) => {
         const chunk = parseInt(selectedOption.value);
-        this.setState({ chunk, selectedOption });
+        const index = this.state.availableChunks.findIndex((opt) => opt.value === chunk.toString());
+        this.setState({ chunkIndex: index, selectedOption });
 
         this.props.onChunkSelected(chunk);
     }
 
     updateChunk = (delta: number) => {
-        let chunk = this.state.chunk;
+        this.setState( {disablePrev: false, disableNext: false} );
+        const chunk = this.state.chunkIndex + 1;
         const newChunk = chunk + delta;
+        if (newChunk === 1) {
+            this.setState( {disablePrev: true} );
+        } else if (newChunk === this.state.availableChunks.length) {
+            this.setState( {disableNext: true })
+        }
         if (this.props.edition!.chunks.indexOf(newChunk) === -1) {
             return;
         }
@@ -54,8 +64,8 @@ class Paging extends React.Component<PagingData, PagingState> {
         if (!newOption) {
             console.error("Can't locate new option!")
         }
-        this.setState({ chunk: newChunk, selectedOption: newOption });
-        this.props.onChunkSelected(newChunk);
+        this.setState({ chunkIndex: newChunk - 1, selectedOption: newOption });
+        this.props.onChunkSelected((newChunk));
     }
 
     render() {
@@ -64,7 +74,7 @@ class Paging extends React.Component<PagingData, PagingState> {
                 {this.props.edition ?
                 <div>
                     <label>Chunk</label>
-                    <button onClick={() => this.updateChunk(-1)}>Prev</button>
+                    <button onClick={() => this.updateChunk(-1)} disabled={this.state.disablePrev}>Prev</button>
                     
                     <Select
                         className='select-style'
@@ -72,7 +82,7 @@ class Paging extends React.Component<PagingData, PagingState> {
                         options={this.state.availableChunks}
                         value={this.state.selectedOption}
                     />
-                    <button onClick={() => this.updateChunk(1)}>Next</button>
+                    <button onClick={() => this.updateChunk(1)} disabled={this.state.disableNext}>Next</button>
                 </div>
                 : <label>There is no edition</label>}
             </div>

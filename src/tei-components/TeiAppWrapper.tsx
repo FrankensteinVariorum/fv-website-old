@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 
 class TeiAppWrapper extends React.Component {
     style = {
