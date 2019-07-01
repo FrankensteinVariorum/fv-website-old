@@ -49,6 +49,8 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     }
 
     render() {
+        const editions = FvStore.editions.map((e) => <label><span className={'dot ed-'+ e.code}></span>{e.name}</label>);
+        
         return (
             <div>
                 <EditionSelector 
@@ -64,6 +66,9 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                 edition={this.state.edition} 
                 chunk={this.state.chunkNumber}
                 onChunkSelected={this.onNewChunk} />
+
+                {editions}
+
                 { this.state.chunk && this.state.edition ? 
                 <TeiRendering
                 chunk={this.state.chunk}

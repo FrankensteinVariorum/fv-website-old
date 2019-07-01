@@ -73,16 +73,15 @@ class Paging extends React.Component<PagingData, PagingState> {
             <div>
                 {this.props.edition ?
                 <div>
-                    <label>Chunk</label>
-                    <button onClick={() => this.updateChunk(-1)} disabled={this.state.disablePrev}>Prev</button>
-                    
+                    <label>CHOOSE A SECTION</label>
                     <Select
                         className='select-style'
                         onChange={this.onChunkChanged}
                         options={this.state.availableChunks}
                         value={this.state.selectedOption}
                     />
-                    <button onClick={() => this.updateChunk(1)} disabled={this.state.disableNext}>Next</button>
+                    <button onClick={() => this.updateChunk(-1)} disabled={this.state.disablePrev}>Previous Section</button>
+                    <button onClick={() => this.updateChunk(1)} disabled={this.state.disableNext}>Next Section</button>
                 </div>
                 : <label>There is no edition</label>}
             </div>

@@ -27,6 +27,7 @@ class TeiReadingGroup extends React.Component<TeiReadingGroupData> {
             <div>
                 {editions}:
                 {teiElement}
+                ___________
             </div>
         );
     }

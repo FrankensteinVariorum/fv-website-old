@@ -1,12 +1,12 @@
 import React from 'react';
 import Select from 'react-select';
-import './EditionSelector.css';
+import './EditionSelector.sass';
 import { Edition } from '../../data/edition';
 import FvStore from '../../data/store';
 
 export interface SelectOption {
     value: string;
-    label: string;
+    label: any;// HTMLSpanElement;
 }
 
 interface EditionSelectorProps {
@@ -37,7 +37,7 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
     }
     
     componentDidMount = () => {
-        const editions = FvStore.editions.map((ed) => ({ value: ed.code, label: ed.name } as SelectOption));
+        const editions = FvStore.editions.map((ed, index) => ({ key: index, value: ed.code, label: <label><span className={'dot ed-' + ed.code}></span>{ed.name}</label> } as SelectOption));
 
         this.setState({ availableEditions: editions, });
     }
@@ -77,20 +77,21 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
     render() {
         return (
         <div>
-            <label>Edition</label>
+            <label>CHOOSE A VERSION</label>
             <Select
                 className='select-style'
                 onChange={this.editionChanged}
                 options={this.state.availableEditions}
             ></Select>
 
+            <label>CHOOSE OPTIONS</label>
             <label>
                 <input
                     name="variation"
                     type="checkbox"
                     checked={this.state.showVariations}
                     onChange={this.onVariationChanged} />
-                Show Variations
+                See Variants
             </label>
             
             <label>
@@ -99,7 +100,7 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
                     type="checkbox"
                     checked={this.state.showText}
                     onChange={this.onTextChanged} />
-                Show Text
+                See Text
             </label>
             <hr />
         </div>
