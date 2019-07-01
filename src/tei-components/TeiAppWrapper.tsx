@@ -12,12 +12,12 @@ interface TeiAppWrapperData {
 }
 
 interface TeiAppWrapperState {
-   elements: ReactNode[];
+   groups: ReactNode[];
 }
 
 class TeiAppWrapper extends React.Component<TeiAppWrapperData, TeiAppWrapperState> {
    state = {
-      elements: [],
+      groups: [],
    }
 
    appClicked = () => {
@@ -34,20 +34,20 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperData, TeiAppWrapperStat
             element: otherGroups[i].element}))
       }
 
-      this.setState( {elements: groups} );
+      this.setState( {groups} );
    }
 
    render() {
       return (
          <div> {
             this.props.showVariations ?
-               <div className={this.props.showVariations ? 'app-wrapper' : ''} onClick={this.appClicked}>
+               <div className='app-wrapper' onClick={this.appClicked}>
                   {this.props.children}
                </div>
-               : <div>children:{this.props.children}</div>
+               : <div>{this.props.children}</div>
             }
             <div>
-               {this.state.elements}
+              {this.state.groups}
             </div>
          </div>
       );

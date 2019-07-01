@@ -12,10 +12,13 @@ export class TeiConverter {
     public showText = false;
     public edition = undefined as Edition | undefined;
 
-    constructor(variations: boolean, text: boolean, edition: Edition) {
-        this.showVariations = variations;
-        this.showText = text;
-        this.edition = edition;
+    constructor(variations?: boolean, text?: boolean, edition?: Edition) {
+        if (variations)
+            this.showVariations = variations;
+        if (text)
+            this.showText = text;
+        if (edition)
+            this.edition = edition;
     }
 
     private getHtmlTag(teiTag: string) {
@@ -43,7 +46,7 @@ export class TeiConverter {
         return valueProps;
     }
 
-    public teiToReactElement(node: Node, chunk: Chunk): ReactNode {  // Returns a single React element
+    public teiToReactElement(node: Node, chunk?: Chunk): ReactNode {  // Returns a single React element
         const reactChildren: ReactNode[] = [];
         // create elements for all children
         if (node.hasChildNodes()) {
@@ -89,16 +92,18 @@ export class TeiConverter {
         let reactElement: ReactNode = React.createElement(TeiReactElement, props, reactChildren); // Pass children
 
         // If node has app-ref, get app, create:
-        const appRef = valueComponent['app-ref'];  // This can be undefined
-        const app = appRef ? props.chunk.getApp(appRef) : undefined;
-        
-        if (app && this.edition) {
-            reactElement = React.createElement(TeiAppWrapper, {key: TeiConverter.index++,
-                showVariations: this.showVariations,
-                showText: this.showText,
-                edition: this.edition,
-                app},
-            [reactElement])
+        if (props.chunk) {
+            const appRef = valueComponent['app-ref'];  // This can be undefined
+            const app = appRef ? props.chunk.getApp(appRef) : undefined;
+            
+            if (app && this.edition) {
+                reactElement = React.createElement(TeiAppWrapper, {key: TeiConverter.index++,
+                    showVariations: this.showVariations,
+                    showText: this.showText,
+                    edition: this.edition,
+                    app},
+                [reactElement])
+            }
         }
         return reactElement;
     }

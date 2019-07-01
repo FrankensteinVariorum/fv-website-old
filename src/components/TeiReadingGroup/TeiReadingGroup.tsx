@@ -1,6 +1,7 @@
 import React from 'react';
 import { Edition } from '../../data/edition';
 import TeiAppWrapper from '../../tei-components/TeiAppWrapper';
+import { TeiConverter } from '../../tei-processing/tei-converter';
 
 interface TeiReadingGroupData {
     editions: Edition[];
@@ -11,18 +12,20 @@ interface TeiReadingGroupData {
 class TeiReadingGroup extends React.Component<TeiReadingGroupData> {
 
     render() {
-        debugger
         const editions = this.props.editions.map((e) => <label>{e.name}</label>);
+
+        const converter = new TeiConverter();
+        const reactElement = converter.teiToReactElement(this.props.element);
+
         const teiElement = React.createElement(TeiAppWrapper, {
             key: 0,
             showVariations: false,
             showText: true
-        });
-        debugger
+        }, [reactElement]);
 
         return (
             <div>
-                {editions}
+                {editions}:
                 {teiElement}
             </div>
         );
