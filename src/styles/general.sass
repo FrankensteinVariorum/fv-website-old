@@ -4,9 +4,10 @@
     border-radius: 50%
     display: inline-block
     background-color: gray
+    margin-right: 10px
 
 .select-style 
-    width: 200px !important
+    width: 200px
 
 .ed-1818
     background-color: #FDB27B
@@ -23,6 +24,9 @@
 .ed-MS
     background-color: #8380E2
 
+button
+    cursor: pointer
+
 .disable-button
     opacity: 0.65
     cursor: not-allowed
@@ -31,7 +35,7 @@
     border-top: 6px solid
 
 .edition-name
-    display: inline-block
+    // display: inline-block
     text-align: center
 
 .right
@@ -41,9 +45,9 @@
 .center
     text-align: center
 
-// .rowC
-//     display:flex
-//     flex-direction:row
+.row
+    display: flex
+    justify-content: space-around
 
 .in-row
     display: inline-block
@@ -53,3 +57,9 @@
 
 .options-label
      display: block
+
+.edition-label
+    margin-right: 20px
+
+.tei-del .tei-cdata // descendants, not only direct children
+    text-decoration: line-through

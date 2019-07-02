@@ -53,23 +53,27 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     render() {
         return (
             <div>
-                <EditionSelector 
-                editions={FvStore.editions} 
-                edition={this.state.edition!}
-                onEditionSelected={this.onNewEdition}
-                />
+                <div className='row'>
+                    <EditionSelector 
+                    editions={FvStore.editions} 
+                    edition={this.state.edition!}
+                    onEditionSelected={this.onNewEdition}
+                    />
 
-                <Paging 
-                edition={this.state.edition} 
-                chunk={this.state.chunkNumber}
-                onChunkSelected={this.onNewChunk} />
+                    <Paging 
+                    edition={this.state.edition} 
+                    chunk={this.state.chunkNumber}
+                    onChunkSelected={this.onNewChunk} />
 
-                <OptionsSelector 
-                showVariations={this.state.showVariations}
-                showText={this.state.showText}
-                onVariationChanged={this.onVariation}
-                onTextChanged={this.onText}
-                />
+                    {/* <div className='right'> */}
+                        <OptionsSelector 
+                        showVariations={this.state.showVariations}
+                        showText={this.state.showText}
+                        onVariationChanged={this.onVariation}
+                        onTextChanged={this.onText}
+                        />
+                    {/* </div> */}
+                </div>
                 
                 <Header
                 edition={this.state.edition} />
@@ -83,15 +87,17 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
 
 
                 <hr className='line' />
-                <EditionSelector 
-                editions={FvStore.editions} 
-                edition={this.state.edition!}
-                onEditionSelected={this.onNewEdition}
-                />
-                <Paging 
-                edition={this.state.edition} 
-                chunk={this.state.chunkNumber}
-                onChunkSelected={this.onNewChunk} />
+                <div className='row'>
+                    <EditionSelector 
+                    editions={FvStore.editions} 
+                    edition={this.state.edition!}
+                    onEditionSelected={this.onNewEdition}
+                    />
+                    <Paging 
+                    edition={this.state.edition} 
+                    chunk={this.state.chunkNumber}
+                    onChunkSelected={this.onNewChunk} />
+                </div>
             </div>
         );
     }
