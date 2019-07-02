@@ -46,8 +46,8 @@ class OptionsSelector extends React.Component<OptionsSelectorProps, OptionsSelec
     render() {
         return (
         <div>
-            <label>CHOOSE OPTIONS</label>
-            <label>
+            <label className='options-label'>CHOOSE OPTIONS</label>
+            <label className='options-label'>
                 <input
                     name="variation"
                     type="checkbox"
@@ -56,7 +56,7 @@ class OptionsSelector extends React.Component<OptionsSelectorProps, OptionsSelec
                 See Variants
             </label>
             
-            <label>
+            <label className='options-label'>
                 <input
                     name="text"
                     type="checkbox"

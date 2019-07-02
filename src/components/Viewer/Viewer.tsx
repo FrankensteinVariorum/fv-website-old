@@ -26,7 +26,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         chunkNumber: 0,
 
         showVariations: true,
-        showText: false,
+        showText: true,
     }
 
     
@@ -44,6 +44,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         this.setState( {edition } );
     }
     onVariation = (show: boolean) => {
+        debugger
         this.setState( { showVariations: show } );
     }
     onText = (show: boolean) => {
