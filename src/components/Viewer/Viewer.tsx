@@ -6,7 +6,7 @@ import { Edition, Chunk } from '../../data/edition';
 import Paging from '../Paging/Paging';
 import Header from '../Header/Header';
 import OptionsSelector from '../OptionsSelector/OptionsSelector';
-import './Viewer.sass';
+import '../../styles/general.sass';
 
 interface ViewerProperties { }
 

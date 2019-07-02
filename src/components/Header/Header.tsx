@@ -1,7 +1,7 @@
 import React from 'react';
 import FvStore from '../../data/store';
 import { Edition } from '../../data/edition';
-import './Header.sass';
+import '../../styles/general.sass';
 
 interface HeaderData {
     edition: Edition | undefined;
