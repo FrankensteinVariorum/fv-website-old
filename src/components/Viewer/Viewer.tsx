@@ -44,7 +44,6 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         this.setState( {edition } );
     }
     onVariation = (show: boolean) => {
-        debugger
         this.setState( { showVariations: show } );
     }
     onText = (show: boolean) => {
