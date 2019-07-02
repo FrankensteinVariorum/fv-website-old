@@ -2,8 +2,8 @@ import React from 'react';
 import { Edition } from '../../data/edition';
 import Select from 'react-select';
 import { SelectOption } from '../EditionSelector/EditionSelector';
-import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-// import arrow from '';
+import pre from '../../assets/pre.jpg';
+import next from '../../assets/next.jpg';
 
 
 interface PagingData {
@@ -82,9 +82,11 @@ class Paging extends React.Component<PagingData, PagingState> {
                         options={this.state.availableChunks}
                         value={this.state.selectedOption}
                     />
-                    {/* <img src={arrow} /> todo: add image */} 
-                    <button onClick={() => this.updateChunk(-1)} disabled={this.state.disablePrev}><IoIosArrowBack />Previous Section</button>
-                    <button onClick={() => this.updateChunk(1)} disabled={this.state.disableNext}>Next Section<IoIosArrowForward /></button>
+                    
+                    <button onClick={() => this.updateChunk(-1)} className={this.state.disablePrev ? 'disable-button': ''}
+                        disabled={this.state.disablePrev}><img src={pre} alt={pre} /></button><label>Previous Section</label>
+                    <label className='margin-button'>Next Section</label><button className={this.state.disableNext ? 'disable-button': ''} onClick={() => this.updateChunk(1)}
+                        disabled={this.state.disableNext}><img src={next} alt={next} /></button>
                 </div>
                 : ''}
             </div>
