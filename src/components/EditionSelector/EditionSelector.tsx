@@ -12,19 +12,13 @@ export interface SelectOption {
 interface EditionSelectorProps {
     editions: Edition[],
     edition: Edition,
-    showVariations: boolean,
-    showText: boolean,
 
     onEditionSelected: (edition: Edition) => void;
-    onVariationChanged: (variation: boolean) => void;
-    onTextChanged: (text: boolean) => void;
 }
 
 interface EditionSelectorState {
     availableEditions: SelectOption[],
     edition: Edition | undefined,
-    showVariations: boolean,
-    showText: boolean,
 }
 
 class EditionSelector extends React.Component<EditionSelectorProps, EditionSelectorState> {
@@ -32,24 +26,12 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
     state = {
         availableEditions: [] as SelectOption[],
         edition: undefined as Edition | undefined,
-        showVariations: true,
-        showText: true,
     }
     
     componentDidMount = () => {
         const editions = FvStore.editions.map((ed, index) => ({ key: index, value: ed.code, label: <label><span className={'dot ed-' + ed.code}></span>{ed.name}</label> } as SelectOption));
 
         this.setState({ availableEditions: editions, });
-    }
-
-    componentDidUpdate(prevProps: EditionSelectorProps) {
-        if (this.props.showVariations !== this.state.showVariations) {
-            this.setState( { showVariations: this.props.showVariations });
-        }
-
-        if(this.props.showText !== this.state.showText) {
-            this.setState( { showText: this.props.showText });
-        }
     }
 
     editionChanged = (selectedOption: SelectOption) => {
@@ -62,18 +44,7 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
         this.props.onEditionSelected(edition);
     }
 
-    onVariationChanged = () => {
-        const newShow = !this.state.showVariations;
-        this.setState( { showVariations: newShow });
-        this.props.onVariationChanged(newShow);
-    }
-    
-    onTextChanged = () => {
-        const newShowText = !this.state.showText;
-        this.setState( { showText: newShowText });
-        this.props.onTextChanged(newShowText);
-    }
-    
+
     render() {
         return (
         <div>
@@ -83,26 +54,6 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
                 onChange={this.editionChanged}
                 options={this.state.availableEditions}
             ></Select>
-
-            <label>CHOOSE OPTIONS</label>
-            <label>
-                <input
-                    name="variation"
-                    type="checkbox"
-                    checked={this.state.showVariations}
-                    onChange={this.onVariationChanged} />
-                See Variants
-            </label>
-            
-            <label>
-                <input
-                    name="text"
-                    type="checkbox"
-                    checked={this.state.showText}
-                    onChange={this.onTextChanged} />
-                See Text
-            </label>
-            <hr />
         </div>
         );
     }

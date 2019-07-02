@@ -4,6 +4,9 @@ import TeiRendering from '../TeiRendering/TeiRendering';
 import FvStore from '../../data/store';
 import { Edition, Chunk } from '../../data/edition';
 import Paging from '../Paging/Paging';
+import Header from '../Header/Header';
+import OptionsSelector from '../OptionsSelector/OptionsSelector';
+import './Viewer.sass';
 
 interface ViewerProperties { }
 
@@ -16,7 +19,6 @@ interface ViewerState {
 }
 
 class Viewer extends React.Component <ViewerProperties, ViewerState> {
-
     state = {
         loading: false,
         chunk: undefined as Chunk | undefined,
@@ -49,25 +51,28 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     }
 
     render() {
-        const editions = FvStore.editions.map((e) => <label><span className={'dot ed-'+ e.code}></span>{e.name}</label>);
-        
         return (
             <div>
                 <EditionSelector 
                 editions={FvStore.editions} 
                 edition={this.state.edition!}
-                showVariations={this.state.showVariations}
-                showText={this.state.showText}
                 onEditionSelected={this.onNewEdition}
-                onVariationChanged={this.onVariation}
-                onTextChanged={this.onText}
                 />
+
                 <Paging 
                 edition={this.state.edition} 
                 chunk={this.state.chunkNumber}
                 onChunkSelected={this.onNewChunk} />
 
-                {editions}
+                <OptionsSelector 
+                showVariations={this.state.showVariations}
+                showText={this.state.showText}
+                onVariationChanged={this.onVariation}
+                onTextChanged={this.onText}
+                />
+                
+                <Header
+                edition={this.state.edition} />
 
                 { this.state.chunk && this.state.edition ? 
                 <TeiRendering
@@ -75,8 +80,19 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                 edition={this.state.edition}
                 showVariations={this.state.showVariations}
                 showText={this.state.showText} /> : '' }
-            </div>
 
+
+                <hr className='line' />
+                <EditionSelector 
+                editions={FvStore.editions} 
+                edition={this.state.edition!}
+                onEditionSelected={this.onNewEdition}
+                />
+                <Paging 
+                edition={this.state.edition} 
+                chunk={this.state.chunkNumber}
+                onChunkSelected={this.onNewChunk} />
+            </div>
         );
     }
 }
