@@ -7,6 +7,8 @@ export interface TeiReactElementProps {
    tag: string;
    id?: string;
    teiProps: any;
+   showText: boolean;
+   showVariations: boolean;
    chunk: Chunk;
 }
 

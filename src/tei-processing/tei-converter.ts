@@ -61,6 +61,8 @@ export class TeiConverter {
                     if (text) {
                         childElement = React.createElement(TeiReactText, {
                             text: childNode.textContent || '',
+                            showText: this.showText,
+                            showVariations: this.showVariations,
                             key: TeiConverter.index++,
                         });
                     }
@@ -82,6 +84,8 @@ export class TeiConverter {
             tag: node.nodeName,
             key: TeiConverter.index++,
             htmlTag: this.getHtmlTag(node.nodeName),
+            showText: this.showText,
+            showVariations: this.showVariations,
             teiProps: valueComponent,
             chunk
         };

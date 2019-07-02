@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { TeiConverter } from '../../tei-processing/tei-converter';
 import { Chunk, Edition } from '../../data/edition';
 
-interface TeiRenderingData {
+interface TeiRenderingProps {
     chunk: Chunk;
     showVariations: boolean;
     showText: boolean;
@@ -14,13 +14,13 @@ interface TeiRenderingState {
     elements: ReactNode[];
 }
 
-class TeiRendering extends React.Component<TeiRenderingData, TeiRenderingState> {
+class TeiRendering extends React.Component<TeiRenderingProps, TeiRenderingState> {
     state = {
         processing: false,
         elements: [],
     }
 
-    constructor(props: TeiRenderingData) {
+    constructor(props: TeiRenderingProps) {
         super(props);
 
         this.state.processing = true;
@@ -28,6 +28,16 @@ class TeiRendering extends React.Component<TeiRenderingData, TeiRenderingState> 
 
     componentDidMount() {
         this.getTeiObjects();
+    }
+
+    componentDidUpdate(prevProps: TeiRenderingProps) {
+        if(!prevProps || 
+            this.props.chunk !== prevProps.chunk || 
+            this.props.edition !== prevProps.edition || 
+            this.props.showText !== prevProps.showText ||
+            this.props.showVariations !== prevProps.showVariations) {
+            this.getTeiObjects(); // No matter which property has changed, we need to render everything again
+        }
     }
 
     getTeiObjects = () => {
