@@ -255,40 +255,43 @@ export class Spine {
     private async rewriteStringRange(ptr: PointerData, range: StringRange) {
         // For now - just get the xml:id of the target element and replace the pointer's target.
         // Add an xml:id if none exists on the target element
+        console.log('rewriteStringRange');
         const targetDoc = await FvStore.cache.getXML(ptr.referencedUrl);
-
-        // The xpath has a bug - it references the 'tei' namespace which is not defined in the spine files - 
-        // the default namespace is the tei namespace there. So we just drop all 'tei:' from the xpath
-        const patchedXPath = range.xpath.replace(/tei:/g, '');
-        const targetNodes = evaluateXPath(targetDoc, patchedXPath);
+        console.log('Get document, trying to evaluate ', range.xpath);
+        const targetNodes = evaluateXPath(targetDoc, range.xpath);
+        console.log('Evaluated xpath');
 
         if (targetNodes.length === 0) {
-            console.error(`string-range for xpath ${patchedXPath} failed to return a node`);
+            console.error(`string-range for xpath ${range.xpath} failed to return a node`);
             throw Error('string-range returned no nodes');
         }
 
         if (targetNodes.length > 1) {
-            console.error(`string-range for xpath ${patchedXPath} returned more than one node`);
+            console.error(`string-range for xpath ${range.xpath} returned more than one node`);
             throw Error('string-range returned more than one node');
         }
 
+        console.log('Changing target element');
         const targetElement = targetNodes[0] as Element;
         const idAttr = targetElement.attributes.getNamedItem('xml:id');
         let xmlId = '';
         if (idAttr) {
             xmlId = idAttr.value;
+            console.log('Setting target to id ', xmlId);
         } else {
             xmlId = `mock-id-${Spine.mockElementCount}`;
             Spine.mockElementCount += 1;
 
             // No xml:id - add a mock one
 
+            console.log('Creating new mock id ', xmlId);
             targetElement.setAttribute('xml:id', xmlId);
         }
 
         // Update the Pointer
         ptr.referencedTarget = xmlId;  // In memory
-        ptr.ptrElement.setAttribute('target', `${ptr.referencedTarget}#${xmlId}`); // In the DOM
+        ptr.ptrElement.setAttribute('target', `${ptr.referencedTarget}#${xmlId}`);
+        console.log('Updated string-range pointer to ', ptr.ptrElement.outerHTML); // In the DOM
     }
 
     private async dereferencePointers() {
