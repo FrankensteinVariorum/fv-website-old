@@ -12,6 +12,12 @@ interface PointerData {
     dereferenced?: Element;
 }
 
+async function debug1818(where: string) {
+    const xml = await FvStore.getEdition('1818').getXML(1);
+    console.debug(`1818 ${where}:`)
+    console.debug(xml.documentElement.outerHTML);
+}
+
 export class ReadingGroup {
     public readonly groupId: string;
     public readonly editions: Edition[];
@@ -52,7 +58,8 @@ export class ReadingGroup {
         const group = doc.createElement('rdgGrp');
         const children = this.pointers.map((ptr) => ptr.dereferenced!);
         for(const child of children) {
-            group.appendChild(child);
+            const clone = child.cloneNode(true);  // We must clone the node, otherwise it's detached from the original XML
+            group.appendChild(clone);
         }
         doc.appendChild(group);
 
@@ -162,18 +169,38 @@ export class Spine {
     private _apps: Apparatus[] | undefined;
     private _xml: Document | undefined;
     private _initialized = false;
+    private _initializationPromise?: Promise<void>;
     private static mockElementCount = 0;
     
     constructor(chunk: number) {
-        this.chunkNumber = chunk;
+        this.chunkNumber = chunk
     }
 
-    public async initialize() {
+    public initialize(): Promise<void> {
+        // Initialize may be called several times before the first initialization complete.
+        // We make sure initialization runs only once
+        if(this._initializationPromise) {
+            return this._initializationPromise;
+        }
+
+        this._initializationPromise = this.innerInitialize();
+        this._initializationPromise.then(() => {
+            this._initializationPromise = undefined;
+        })
+        return this._initializationPromise;
+    }
+
+    private async innerInitialize() {
+        if(this._initialized) {
+            return;
+        }
+
         if (this._initialized) {
             return;
         }
 
         this._xml = await this.getXML();
+
         await this.parseApps();
         await this.fetchAllReferences();
         await this.rewriteStringRanges();
@@ -188,7 +215,8 @@ export class Spine {
         const chunkStr = this.chunkNumber < 10 ? `0${this.chunkNumber}` : `${this.chunkNumber}`;
         const url = `https://raw.githubusercontent.com/PghFrankenstein/fv-data/master/standoff_Spine/spine_C${chunkStr}.xml`
 
-        return await FvStore.cache.getXML(url);
+        const document = await FvStore.cache.getXML(url);
+        return document;
     }
 
     private async parseApps() {

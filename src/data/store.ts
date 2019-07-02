@@ -47,5 +47,5 @@ import { Spine } from "./spine";
      }
  }
 
- const FvStore = FvStoreClass.instance;
- export default FvStore;  // Everybody can just access FvStore.property
+const FvStore = FvStoreClass.instance;
+export default FvStore;  // Everybody can just access FvStore.property
