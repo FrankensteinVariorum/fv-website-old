@@ -83,7 +83,7 @@ class Paging extends React.Component<PagingData, PagingState> {
                         value={this.state.selectedOption}
                     />
                     
-                    <div className="in-row">
+                    <div>
                         <button onClick={() => this.updateChunk(-1)} className={this.state.disablePrev ? 'disable-button': ''}
                             disabled={this.state.disablePrev}><img src={pre} alt={pre} /></button><label>Previous Section</label>
                         <label className='margin-button'>Next Section</label><button className={this.state.disableNext ? 'disable-button': ''} onClick={() => this.updateChunk(1)}

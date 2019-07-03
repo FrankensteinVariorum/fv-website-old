@@ -1,7 +1,9 @@
 import React from 'react';
 import FvStore from '../../data/store';
 import { Edition } from '../../data/edition';
-import '../../styles/general.sass';
+import '../../styles/_viewer.sass';
+// import '../../styles/general.sass';
+
 import variations from '../../assets/variations.jpg';
 
 interface HeaderData {
@@ -15,21 +17,27 @@ class Header extends React.Component<HeaderData> {
             <label key={index} className='edition-label'><span className={'dot ed-'+ e.code}></span>{e.name}</label>);
         return (
             <div>
-                <div className='row'>
-                    {editions}
-                    {this.props.edition ?
-                    <h2 className='edition-name'>{this.props.edition.name} Edition</h2>
-                    : <h2 className='edition-name'>Edition</h2>}
-                    <div className='right'>
+                <header className='viewer__cols'>
+                    <div id='viewer__legend-editions'>
+                        {editions}
+                    </div>
+                    <div id='viewer__title'>
+                        {this.props.edition ?
+                        <h2>{this.props.edition.name} Edition</h2>
+                        : <h2>Edition</h2>}
+                    </div>
+                    <div id='viewer__legend-variance'>
                         <label>Amount of Variance</label>
                         <img src={variations} alt={variations} />
                     </div>
-                </div>
+                </header>
 
                 <hr className='line' />
-                <label className='left'>Marginalia</label>
-                <label className='center'>Text</label>
-                <label className='right'>Variations</label>
+                <div className='viewer__cols'>
+                    <div>Marginalia</div>
+                    <div>Text</div>
+                    <div>Variations</div>
+                </div>
             </div>
         );
     }
