@@ -37,17 +37,17 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
          dotElements.push(<span className='dot dot-break'/>);
       }
 
-
+      console.log('dotElements ', dotElements);
       return (
          <div className='app-wrapper' onClick={ this.onClick }>
             <div className={innerClasses}>
                { this.props.children }
             </div>
+            <div className='app-wrapper-dots'>
+               { dotElements }
+            </div>
          </div>
       );
-/*            <div className='app-wrapper-dots'>
-               {{ dotElements }}
-            </div> */
    }
 }
 
