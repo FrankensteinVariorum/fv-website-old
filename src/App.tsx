@@ -7,9 +7,6 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <header className="App-header">         
-          {/* <Collator/> */}
-        </header>
         <div className="App">
           <Viewer />
         </div>

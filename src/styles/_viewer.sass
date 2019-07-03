@@ -1,3 +1,5 @@
+@import './_00_configuration.sass'
+
 #viewer
   > *
     margin-bottom: rv(0)
@@ -5,6 +7,27 @@
     &:last-child
       margin-bottom: 0
 
+#viewer__controls
+  display: grid
+  grid-template-columns: 2fr 4fr 2fr
+  grid-gap: rv(0)
+
+  > *
+    background-color: $lightest_neutral
+    padding-top: rv(-1)
+    padding-bottom: rv(-1)
+    
+    
+#viewer_pagination_controls
+  display: grid
+  grid-template-columns: 1fr 2fr 2fr 
+  grid-gap: rv(0)
+
+  > *
+    background-color: $lightest_neutral
+    padding-top: rv(-1)
+    padding-bottom: rv(-1)
+    
 .viewer__cols
   display: grid
   grid-template-columns: 2fr 4fr 2fr
@@ -29,3 +52,6 @@
   display: flex
   align-items: center
   
+.line
+    border-top: 6px solid
+    background-color: $lightest_neutral
