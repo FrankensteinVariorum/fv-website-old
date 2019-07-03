@@ -278,11 +278,8 @@ export class Spine {
     private async rewriteStringRange(ptr: PointerData, range: StringRange) {
         // For now - just get the xml:id of the target element and replace the pointer's target.
         // Add an xml:id if none exists on the target element
-        console.log('rewriteStringRange');
         const targetDoc = await FvStore.cache.getXML(ptr.referencedUrl);
-        console.log('Get document, trying to evaluate ', range.xpath);
         const targetNodes = evaluateXPath(targetDoc, range.xpath);
-        console.log('Evaluated xpath');
 
         if (targetNodes.length === 0) {
             console.error(`string-range for xpath ${range.xpath} failed to return a node`);
@@ -294,27 +291,23 @@ export class Spine {
             throw Error('string-range returned more than one node');
         }
 
-        console.log('Changing target element');
         const targetElement = targetNodes[0] as Element;
         const idAttr = targetElement.attributes.getNamedItem('xml:id');
         let xmlId = '';
         if (idAttr) {
             xmlId = idAttr.value;
-            console.log('Setting target to id ', xmlId);
         } else {
             xmlId = `mock-id-${Spine.mockElementCount}`;
             Spine.mockElementCount += 1;
 
             // No xml:id - add a mock one
 
-            console.log('Creating new mock id ', xmlId);
             targetElement.setAttribute('xml:id', xmlId);
         }
 
         // Update the Pointer
         ptr.referencedTarget = xmlId;  // In memory
         ptr.ptrElement.setAttribute('target', `${ptr.referencedTarget}#${xmlId}`);
-        console.log('Updated string-range pointer to ', ptr.ptrElement.outerHTML); // In the DOM
     }
 
     private async dereferencePointers() {

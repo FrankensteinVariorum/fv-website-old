@@ -13,7 +13,7 @@ interface VariationProps {
 class Variation extends React.Component <VariationProps> {
     render() {
         const groups = this.props.app.groups.map((grp) => (
-            <ReadingGroupComponent group={grp}/>
+            <ReadingGroupComponent group={grp} key={grp.groupId}/>
         ))
         return (
             <div className="app-list">

@@ -18,11 +18,11 @@ import { Spine } from "./spine";
      private constructor() {
          this.cache = new XmlCache();
          this.editions = [
-             new EditionWithBody('1818', '1818', [1, 2, 3, 4, 5, 6]), // , 7, 8, 9, 10]),
-             new EditionWithBody('1823', '1823', [1, 2, 3, 4, 5, 6]), //, 7, 8, 9, 10]),
-             new EditionWithBody('1831', '1831', [1, 2, 3, 4, 5, 6]), //, 7, 8, 9, 10]),
-             new EditionWithBody('Thomas', 'Thomas', [1, 2, 3, 4, 5, 6]), //, 7, 8, 9, 10]),
-             // new MSEdition('MS', 'MS', [7, 8, 9, 10]),
+             new EditionWithBody('1818', '1818', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+             new EditionWithBody('1823', '1823', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+             new EditionWithBody('1831', '1831', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+             new EditionWithBody('Thomas', 'Thomas', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+             new MSEdition('MS', 'MS', [7, 8, 9, 10]),
          ]
 
          this.spines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => new Spine(i));

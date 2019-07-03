@@ -31,10 +31,12 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
       // Calculate the dot elements
       const groups = this.props.app.getOtherGroups(this.props.edition!);
       let dotElements: any[] = [];
+      let key = 0;
       for(const group of groups) {
          const groupDots = group.editions.map((ed) => <EditionDot edition={ ed } key={ed.code} />);
          dotElements = dotElements.concat(groupDots);
-         dotElements.push(<span className='dot dot-break'/>);
+         dotElements.push(<span className='dot dot-break' key={key}/>);
+         key++;
       }
 
       let dotClasses = 'app-wrapper-dots';
