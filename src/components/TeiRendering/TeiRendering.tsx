@@ -12,20 +12,12 @@ interface TeiRenderingProps {
 }
 
 interface TeiRenderingState {
-    processing: boolean;
-    elements: ReactNode[];
+    element?: ReactNode;
 }
 
 class TeiRendering extends React.Component<TeiRenderingProps, TeiRenderingState> {
     state = {
-        processing: false,
-        elements: [],
-    }
-
-    constructor(props: TeiRenderingProps) {
-        super(props);
-
-        this.state.processing = true;
+        element: undefined,
     }
 
     componentDidMount() {
@@ -46,15 +38,15 @@ class TeiRendering extends React.Component<TeiRenderingProps, TeiRenderingState>
         const body = this.props.chunk.root;
     
         const converter = new TeiConverter(this.props.showVariations, this.props.showText, this.props.edition, this.props.chunk);
-        const reactElement = converter.teiToReactElement(body);
+        const reactElement = converter.teiToReactElement(body, this.props.onAppClick);
 
-        this.setState( { processing: false, elements: [reactElement]});
+        this.setState( { element: reactElement });
     } 
 
     render() {
         return (
-            <div>
-                { this.state.processing ? 'Processing...' : this.state.elements }
+            <div className="tei-container">
+                { this.state.element }
             </div>
         );
     }

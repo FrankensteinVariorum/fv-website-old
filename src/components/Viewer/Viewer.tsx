@@ -10,7 +10,7 @@ import '../../styles/_00_configuration.sass';
 import '../../styles/_viewer.sass';
 import '../../styles/general.sass';
 import { Apparatus } from '../../data/spine';
-import AppList from '../AppList/AppList';
+import Variation from '../Variations/App';
 
 interface ViewerProperties { }
 
@@ -90,9 +90,6 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
 
                 <div id='viewer__contents' className='viewer__cols'>
                     <aside id="viewer__marginalia">
-                        <div id="viewer__marginalia--zone1" className='viewer__zone'>Zone 1</div>
-                        <div id="viewer__marginalia--zone2" className='viewer__zone'>Zone 2</div>
-                        <div id="viewer__marginalia--zone3" className='viewer__zone'>Zone 3</div>
                     </aside>
                     { this.state.chunk && this.state.edition ? 
                     <TeiRendering
@@ -102,7 +99,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                     showText={this.state.showText}
                     onAppClick={this.onAppClick}/> : <div></div>}
                     <aside id="viewer_variations">
-                        { this.state.app ? <AppList app={this.state.app!}/> : '' }
+                        { this.state.app ? <Variation app={this.state.app!} edition={this.state.edition!}/> : '' }
                     </aside>
                 </div>
 
