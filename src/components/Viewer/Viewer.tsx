@@ -48,6 +48,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
 
     onNewEdition = (edition: Edition) => {
         this.setState( {edition } );
+        console.log("edition changed. state.edition=", this.state.edition)
     }
     onVariation = (show: boolean) => {
         this.setState( { showVariations: show } );
@@ -109,6 +110,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                 <hr className='line' />
                 <footer id="viewer_pagination_controls">
                     <div></div>
+                    
                     <EditionSelector
                     key={2}
                     editions={FvStore.editions} 

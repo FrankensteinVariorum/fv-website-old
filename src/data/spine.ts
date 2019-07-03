@@ -12,11 +12,11 @@ interface PointerData {
     dereferenced?: Element;
 }
 
-async function debug1818(where: string) {
-    const xml = await FvStore.getEdition('1818').getXML(1);
-    console.debug(`1818 ${where}:`)
-    console.debug(xml.documentElement.outerHTML);
-}
+// async function debug1818(where: string) {
+//     const xml = await FvStore.getEdition('1818').getXML(1);
+//     console.debug(`1818 ${where}:`)
+//     console.debug(xml.documentElement.outerHTML);
+// }
 
 export class ReadingGroup {
     public readonly groupId: string;
