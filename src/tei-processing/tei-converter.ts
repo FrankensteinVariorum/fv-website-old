@@ -1,13 +1,17 @@
 /* This file contains a class that takes the TEI and converts it into a React tree */
 
 import React, { ReactNode } from 'react';
-import TeiReactElement from '../tei-components/TeiReactElement';
-import TeiReactText from '../tei-components/TeiReactText';
-import { Chunk } from '../data/edition';
-import TeiAppWrapper from '../tei-components/TeiAppWrapper';
+import TeiReactElement from '../components/tei/TeiReactElement';
+import TeiReactText from '../components/tei/TeiReactText';
+import { Chunk, Edition } from '../data/edition';
+import TeiAppWrapper from '../components/tei/TeiAppWrapper';
+import { Apparatus } from '../data/spine';
 
 export class TeiConverter {
     private static index = 0;
+
+    constructor(private showVariations: boolean, private showText: boolean, private edition?: Edition, private chunk?: Chunk) {
+    }
 
     private getHtmlTag(teiTag: string) {
         if (teiTag === 'p') {
@@ -34,7 +38,7 @@ export class TeiConverter {
         return valueProps;
     }
 
-    public teiToReactElement(node: Node, chunk: Chunk): ReactNode {  // Returns a single React element
+    public teiToReactElement(node: Node, onAppClick?: (app: Apparatus) => void): ReactNode {  // Returns a single React element
         const reactChildren: ReactNode[] = [];
         // create elements for all children
         if (node.hasChildNodes()) {
@@ -42,13 +46,15 @@ export class TeiConverter {
                 const childNode = node.childNodes[i];
                 let childElement: ReactNode = undefined;
                 if (childNode.nodeType === 1) {
-                    childElement = this.teiToReactElement(childNode, chunk);
+                    childElement = this.teiToReactElement(childNode, onAppClick);
                 } else if (childNode.nodeType === 3) {
                     let text = childNode.textContent || '';
                     text = text.trim();
                     if (text) {
                         childElement = React.createElement(TeiReactText, {
                             text: childNode.textContent || '',
+                            showText: this.showText,
+                            showVariations: this.showVariations,
                             key: TeiConverter.index++,
                         });
                     }
@@ -63,29 +69,34 @@ export class TeiConverter {
         }
 
         // build properties
-        const valueComponent = this.buildProperties(node);
+        const teiProps = this.buildProperties(node);
 
         // return create react element
         var props: any = {
             tag: node.nodeName,
             key: TeiConverter.index++,
             htmlTag: this.getHtmlTag(node.nodeName),
-            teiProps: valueComponent,
-            chunk
+            showText: this.showText,
+            showVariations: this.showVariations,
+            teiProps: teiProps,
         };
-        if (valueComponent.id) {
-            props['id'] = valueComponent.id;
-        }
 
         let reactElement: ReactNode = React.createElement(TeiReactElement, props, reactChildren); // Pass children
 
-        // If node has app-ref, get app, create:
-        const appRef = valueComponent['app-ref'];  // This can be undefined
-        const app = appRef ? props.chunk.getApp(appRef) : undefined;
-        
-        if (app) {
-            reactElement = React.createElement(TeiAppWrapper, {key: TeiConverter.index++}, [reactElement])
+        if (this.chunk && this.showVariations && teiProps['app-ref']) {
+            const app = this.chunk.getApp(teiProps['app-ref']);
+
+            // We have an <app> to wrap around the element
+            reactElement = React.createElement(TeiAppWrapper, {
+                key: TeiConverter.index++,
+                showVariations: this.showVariations,
+                showText: this.showText,
+                edition: this.edition,
+                onAppClick,
+                app},
+            [reactElement])
         }
+
         return reactElement;
     }
 }

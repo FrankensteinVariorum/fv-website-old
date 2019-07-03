@@ -6,17 +6,31 @@
 
 export default class XmlCache {
     private  _xmls : Map<string, Document>;  // Map from URL to a parsed XML
+    private _promises: Map<string, Promise<Document>>;
+    private static documentCount = 0;
 
     public constructor() {
         this._xmls = new Map<string, Document>();
+        this._promises = new Map<string, Promise<Document>>();
     }
 
-    public async getXML(url: string) {
-        if (!this._xmls.has(url)) {
-            await this.fetchXML(url);
+    public getXML(url: string): Promise<Document> {
+        // This function is async, but we implement the Promises ourselves, since we also cache promises
+        // This code only works because asynchronous Javascript is single threaded (note there are no locks)
+        if (this._xmls.has(url)) {
+            return Promise.resolve(this._xmls.get(url)!);
         }
 
-        return this._xmls.get(url)!; // The ! means we are cetain 'undefined' will not be returned
+        if (this._promises.has(url)) {
+            return this._promises.get(url)!;
+        }
+
+        const promise = this.fetchXML(url);
+        this._promises.set(url, promise);
+        promise.then(() => {
+            this._promises.delete(url);
+        });
+        return promise;
     }
 
     private parseXML(xml: string) {
