@@ -26,7 +26,7 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
 
       const intensity = this.props.app.n || 1;
       const level = (intensity < 5) ? 1 : (intensity < 25) ? 2 : 3;
-      const innerClasses = `app-wrapper-content app-intensity-${level}`;
+      const classes = `app-wrapper app-intensity-${level}`;
 
       // Calculate the dot elements
       const groups = this.props.app.getOtherGroups(this.props.edition!);
@@ -43,13 +43,11 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
       }
 
       return (
-         <div className='app-wrapper' onClick={ this.onClick }>
-            <div className={innerClasses}>
-               <div className={dotClasses}>
-                  { dotElements }
-               </div>
-               { this.props.children }
+         <div className={classes} onClick={this.onClick}>
+            <div className={dotClasses}>
+               { dotElements }
             </div>
+            { this.props.children }
          </div>
       );
    }
