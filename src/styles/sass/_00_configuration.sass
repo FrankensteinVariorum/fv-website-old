@@ -1,12 +1,10 @@
-// @import './_itc_franklin_gothic.sass'
-// @import './_miller_display.sass'
-/**
+  /**
  * @file
  * Base Theme Configuration Example and Starter configuration.
  * See _configuration_instructions.txt for help.
  * Copy this file to 00_configuration.sass to begin.
  */
-
+  
  
 /* !APPLICATION */
 
@@ -82,7 +80,10 @@ $clr_ms: $clr4
 $clr_1818: $clr2 
 $clr_thomas: $clr5
 $clr_1823: $clr4
-$ckr_1831: $clr3
+$clr_1831: $clr3
+
+
+$app_intensities_map: (0: lighten($black,95%), 1: lighten($black,80%), 2: lighten($black,70%), 3: lighten($black,60%))
 
 // Define the colour of the page background
 
@@ -124,8 +125,8 @@ $typescale: (base: 0, xsml: 0, sml: 0, med: 0, lrg: 0, xlrg: 0, xxlrg: 0)
 // Face definition mixins are located in a-core/libraries/16_font_definitions
 
 // font-amiri()
-// +font-itc-franklin-gothic()
-// +font-miller-display()
++font-itc-franklin-gothic()
++font-miller-display()
 
 $basefont: Georgia, serif
 $headingfont: "MillerDisplay", Georgia, serif

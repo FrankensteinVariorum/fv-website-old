@@ -6,9 +6,6 @@ import { Edition, Chunk } from '../../data/edition';
 import Paging from '../PageLayout/Paging';
 import Header from '../PageLayout/Header';
 import OptionsSelector from '../PageLayout/OptionsSelector';
-import '../../styles/_00_configuration.sass';
-import '../../styles/_viewer.sass';
-import '../../styles/general.sass';
 import { Apparatus } from '../../data/spine';
 import Variation from '../Variations/Variation';
 

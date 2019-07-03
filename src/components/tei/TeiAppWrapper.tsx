@@ -1,7 +1,6 @@
 import React from 'react';
 import { Apparatus } from '../../data/spine';
 import { Edition } from '../../data/edition';
-import '../../styles/tei.sass';
 import EditionDot from '../helpers/EditionDot';
 
 interface TeiAppWrapperProps {

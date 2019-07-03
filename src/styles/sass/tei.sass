@@ -1,3 +1,8 @@
+/* 
+   @file viewer/_tei.sass 
+   @author Research Software Company
+   @description Frankenstein Variorum Viewer TEI styles. */
+
 .tei-cdata
     &.no-text
         opacity: 0
@@ -5,19 +10,19 @@
     &.tei-del
         text-decoration: line-through
 
-    line-height: 40px;
+    line-height: 3em;
 
 .app-intensity-0
-    background-color: #f0f0f0
+    background-color: map-get($app_intensities_map, 0)
 
 .app-intensity-1
-    background-color: #c0c0c0
+    background-color: map-get($app_intensities_map, 1)
 
 .app-intensity-2
-    background-color: #a0a0a0
+    background-color: map-get($app_intensities_map, 2)
 
 .app-intensity-3
-    background-color: #808080
+    background-color: map-get($app_intensities_map, 3)
 
 .tei-container div
     display: inline
@@ -27,9 +32,9 @@
 
 .app-wrapper
     position: relative
-    
+
 .app-wrapper-dots
-    width: 200px
+    width: 200px;
     position: absolute
     top: 1em
     left: 0

@@ -1,10 +1,8 @@
 import React from 'react';
 import FvStore from '../../data/store';
 import { Edition } from '../../data/edition';
-import '../../styles/_viewer.sass';
-// import '../../styles/general.sass';
 
-import variations from '../../assets/variations.jpg';
+import variations from '../../images/intensity_legend.svg';
 import EditionDot from '../helpers/EditionDot';
 
 interface HeaderData {

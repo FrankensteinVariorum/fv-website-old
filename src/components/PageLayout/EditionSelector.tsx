@@ -2,7 +2,6 @@ import React from 'react';
 import Select from 'react-select';
 import { Edition } from '../../data/edition';
 import FvStore from '../../data/store';
-import '../../styles/general.sass';
 import EditionDot from '../helpers/EditionDot';
 
 export interface SelectOption {

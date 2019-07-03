@@ -1,7 +1,5 @@
 import { Apparatus } from "../../data/spine";
 import React from "react";
-
-import '../../styles/tei.sass';
 import { Edition } from "../../data/edition";
 import ReadingGroupComponent from "./ReadingGroupComponent";
 

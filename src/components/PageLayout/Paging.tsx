@@ -4,8 +4,6 @@ import Select from 'react-select';
 import { SelectOption } from './EditionSelector';
 import pre from '../../assets/pre.jpg';
 import next from '../../assets/next.jpg';
-import '../../styles/general.sass';
-
 
 interface PagingProps {
     edition: Edition | undefined;
