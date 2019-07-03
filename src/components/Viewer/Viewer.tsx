@@ -1,11 +1,11 @@
 import React from 'react';
-import EditionSelector from '../EditionSelector/EditionSelector';
+import EditionSelector from '../PageLayout/EditionSelector';
 import TeiRendering from '../TeiRendering/TeiRendering';
 import FvStore from '../../data/store';
 import { Edition, Chunk } from '../../data/edition';
-import Paging from '../Paging/Paging';
-import Header from '../Header/Header';
-import OptionsSelector from '../OptionsSelector/OptionsSelector';
+import Paging from '../PageLayout/Paging';
+import Header from '../PageLayout/Header';
+import OptionsSelector from '../PageLayout/OptionsSelector';
 import '../../styles/_00_configuration.sass';
 import '../../styles/_viewer.sass';
 import '../../styles/general.sass';

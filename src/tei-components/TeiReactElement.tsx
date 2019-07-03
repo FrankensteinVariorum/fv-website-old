@@ -33,4 +33,3 @@ class TeiReactElement extends React.Component<TeiReactElementProps> {
 }
 
 export default TeiReactElement;
-
