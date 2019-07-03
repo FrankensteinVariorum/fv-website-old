@@ -1,6 +1,6 @@
 import React from 'react';
 import EditionSelector from '../PageLayout/EditionSelector';
-import TeiRendering from '../TeiRendering/TeiRendering';
+import TeiRendering from '../tei/TeiContainer';
 import FvStore from '../../data/store';
 import { Edition, Chunk } from '../../data/edition';
 import Paging from '../PageLayout/Paging';

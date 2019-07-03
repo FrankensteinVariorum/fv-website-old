@@ -1,8 +1,8 @@
 import React from 'react';
-import { Apparatus } from '../data/spine';
-import { Edition } from '../data/edition';
-import '../styles/tei.sass';
-import EditionDot from '../components/helpers/EditionDot';
+import { Apparatus } from '../../data/spine';
+import { Edition } from '../../data/edition';
+import '../../styles/tei.sass';
+import EditionDot from '../helpers/EditionDot';
 
 interface TeiAppWrapperProps {
    showVariations: boolean;

@@ -1,10 +1,10 @@
 /* This file contains a class that takes the TEI and converts it into a React tree */
 
 import React, { ReactNode } from 'react';
-import TeiReactElement from '../tei-components/TeiReactElement';
-import TeiReactText from '../tei-components/TeiReactText';
+import TeiReactElement from '../components/tei/TeiReactElement';
+import TeiReactText from '../components/tei/TeiReactText';
 import { Chunk, Edition } from '../data/edition';
-import TeiAppWrapper from '../tei-components/TeiAppWrapper';
+import TeiAppWrapper from '../components/tei/TeiAppWrapper';
 import { Apparatus } from '../data/spine';
 
 export class TeiConverter {

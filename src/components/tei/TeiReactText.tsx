@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/tei.sass';
+import '../../styles/tei.sass';
 
 interface TeiReactTextProps {
     text: string;
