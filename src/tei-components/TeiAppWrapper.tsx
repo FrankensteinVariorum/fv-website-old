@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { Apparatus } from '../data/spine';
 import { Edition } from '../data/edition';
 import '../styles/tei.sass';
+import EditionDot from '../components/helpers/EditionDot';
 
 interface TeiAppWrapperProps {
    showVariations: boolean;
@@ -19,20 +20,34 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
    }
 
    render() {
-      const intensity = this.props.app.n || 0;
-      const level = (intensity < 10) ? 0 : (intensity < 100) ? 1  : (intensity < 1000) ? 2 : 3;
-      const classNames = `app-wrapper app-intensity-${level}`;
+      if(!this.props.showVariations) {
+         return <div className='app-wrapper-hidden'>{ this.props.children }</div>;
+      }
+
+      const intensity = this.props.app.n || 1;
+      const level = (intensity < 5) ? 1 : (intensity < 25) ? 2 : 3;
+      const innerClasses = `app-wrapper-content app-intensity-${level}`;
+
+      // Calculate the dot elements
+      const groups = this.props.app.getOtherGroups(this.props.edition!);
+      let dotElements: any[] = [];
+      for(const group of groups) {
+         const groupDots = group.editions.map((ed) => <EditionDot edition={ ed } />);
+         dotElements = dotElements.concat(groupDots);
+         dotElements.push(<span className='dot dot-break'/>);
+      }
+
 
       return (
-         <div> {
-            this.props.showVariations ?
-               <div className={ classNames } onClick={this.onClick}>
-                  {this.props.children}
-               </div>
-               : <div>{this.props.children}</div>
-            }
+         <div className='app-wrapper' onClick={ this.onClick }>
+            <div className={innerClasses}>
+               { this.props.children }
+            </div>
          </div>
       );
+/*            <div className='app-wrapper-dots'>
+               {{ dotElements }}
+            </div> */
    }
 }
 
