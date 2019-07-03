@@ -1,5 +1,6 @@
 import FvStore from "./store";
 import { Spine } from "./spine";
+import { evaluateXPath } from "../tei-processing/helpers";
 
 export abstract class Edition {
     public readonly code: string = ''; // 1818, 1823, 1831, Thomas, MS
@@ -23,13 +24,13 @@ export abstract class Edition {
         return await FvStore.cache.getXML(this.getChunkUrl(chunkId));
     }
 
-    public abstract getRootElement(document: Document): Element;
+    public abstract getRootElements(document: Document): Element[];
 }
 
 export class EditionWithBody extends Edition {
-    public getRootElement(document: Document): Element {
+    public getRootElements(document: Document): Element[] {
         try {
-            return document.getElementsByTagName('body')[0];
+            return [document.getElementsByTagName('body')[0]];
         } catch(err) {
             console.error(`Can't located body element of ${this.code}: ${err}`);
             throw new Error("Can't locate body element");
@@ -37,13 +38,20 @@ export class EditionWithBody extends Edition {
     }
 } 
 
-export class MSEdition extends EditionWithBody { }  // TODO: Add our own getRootElementW
+export class MSEdition extends Edition { 
+    public getRootElements(document: Document): Element[] {
+        const xpath = "//tei:zone[@type='main']";
+        const nodes = evaluateXPath(document, xpath);
+        return nodes.map((n) => n as Element);
+    }
+}
+
 
 export class Chunk {
     public readonly edition: Edition;
     public readonly chunkNumber: number;
     public readonly tei: Document;
-    public readonly root: Element;
+    public readonly roots: Element[];
     public readonly variations: Spine;
 
     private constructor(edition: Edition, chunkNumber: number, tei: Document, spine: Spine) {
@@ -51,7 +59,7 @@ export class Chunk {
         this.chunkNumber = chunkNumber;
         this.tei = tei;
         this.variations = spine;
-        this.root = edition.getRootElement(tei);
+        this.roots = edition.getRootElements(tei);
     }
 
     public static async load(edition: Edition, chunkNumber: number): Promise<Chunk> {

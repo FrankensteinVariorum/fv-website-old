@@ -12,12 +12,12 @@ interface TeiRenderingProps {
 }
 
 interface TeiRenderingState {
-    element?: ReactNode;
+    elements?: ReactNode[];
 }
 
 class TeiRendering extends React.Component<TeiRenderingProps, TeiRenderingState> {
     state = {
-        element: undefined,
+        elements: undefined,
     }
 
     componentDidMount() {
@@ -35,18 +35,16 @@ class TeiRendering extends React.Component<TeiRenderingProps, TeiRenderingState>
     }
 
     getTeiObjects = () => {
-        const body = this.props.chunk.root;
-    
         const converter = new TeiConverter(this.props.showVariations, this.props.showText, this.props.edition, this.props.chunk);
-        const reactElement = converter.teiToReactElement(body, this.props.onAppClick);
+        const elements = this.props.chunk.roots.map((root) => converter.teiToReactElement(root, this.props.onAppClick));
 
-        this.setState( { element: reactElement });
+        this.setState( { elements });
     } 
 
     render() {
         return (
             <div className="tei-container">
-                { this.state.element }
+                { this.state.elements }
             </div>
         );
     }
