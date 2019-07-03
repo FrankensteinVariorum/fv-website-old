@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { Edition } from '../../data/edition';
 import FvStore from '../../data/store';
 import '../../styles/general.sass';
+import EditionDot from '../helpers/EditionDot';
 
 export interface SelectOption {
     value: string;
@@ -29,7 +30,7 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
     }
     
     componentDidMount = () => {
-        const editions = FvStore.editions.map((ed, index) => ({ key: index, value: ed.code, label: <label><span className={'dot ed-' + ed.code}></span>{ed.name}</label> } as SelectOption));
+        const editions = FvStore.editions.map((ed, index) => ({ key: index, value: ed.code, label: <label><EditionDot edition={ ed }/>{ed.name}</label> } as SelectOption));
 
         this.setState({ availableEditions: editions, });
     }

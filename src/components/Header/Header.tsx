@@ -5,6 +5,7 @@ import '../../styles/_viewer.sass';
 // import '../../styles/general.sass';
 
 import variations from '../../assets/variations.jpg';
+import EditionDot from '../helpers/EditionDot';
 
 interface HeaderData {
     edition: Edition | undefined;
@@ -14,7 +15,7 @@ class Header extends React.Component<HeaderData> {
 
     render() {
         const editions = FvStore.editions.map((e, index) => 
-            <label key={index} className='edition-label'><span className={'dot ed-'+ e.code}></span>{e.name}</label>);
+            <label key={index} className='edition-label'><EditionDot edition={e}/>{e.name}</label>);
         return (
             <div>
                 <header className='viewer__cols'>
