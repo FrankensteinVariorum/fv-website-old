@@ -36,7 +36,7 @@ class TeiRendering extends React.Component<TeiRenderingProps, TeiRenderingState>
 
     getTeiObjects = () => {
         const converter = new TeiConverter(this.props.showVariations, this.props.showText, this.props.edition, this.props.chunk);
-        const elements = this.props.chunk.roots.map((root) => converter.teiToReactElement(root, this.props.onAppClick));
+        const elements = this.props.chunk.mainRoots.map((root) => converter.teiToReactElement(root, this.props.onAppClick));
 
         this.setState( { elements });
     } 

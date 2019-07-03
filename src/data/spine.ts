@@ -300,14 +300,14 @@ export class Spine {
             xmlId = `mock-id-${Spine.mockElementCount}`;
             Spine.mockElementCount += 1;
 
-            // No xml:id - add a mock one
-
-            targetElement.setAttribute('xml:id', xmlId);
+            // Adding xml:id to an existing document doesn't work fully - XPath doesn't find it
+            // unless the document is completely reparsed. So we add our own mock-id attribute instead
+            targetElement.setAttribute('mock-id', xmlId);
         }
 
         // Update the Pointer
         ptr.referencedTarget = xmlId;  // In memory
-        ptr.ptrElement.setAttribute('target', `${ptr.referencedTarget}#${xmlId}`);
+        ptr.ptrElement.setAttribute('target', `${ptr.referencedUrl}#${xmlId}`);
     }
 
     private async dereferencePointers() {

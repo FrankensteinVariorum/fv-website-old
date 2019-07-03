@@ -19,7 +19,8 @@ export function evaluateXPath(doc: Document, xpath: string): Node[] {
 }
 
 export function findElementByXmlId(doc: Document, xmlId: string): Element {
-    const xpath = `//*[@xml:id="${xmlId}"]`;
+    const attrName = xmlId.startsWith('mock') ? 'mock-id' : 'xml:id';
+    const xpath = `//*[@${attrName}="${xmlId}"]`;
     const idResults = evaluateXPath(doc, xpath);
 
     if (idResults.length === 0) {

@@ -24,11 +24,14 @@ export abstract class Edition {
         return await FvStore.cache.getXML(this.getChunkUrl(chunkId));
     }
 
-    public abstract getRootElements(document: Document): Element[];
+    public abstract getMainRootElements(document: Document): Element[];
+    public getMarginRootElements(document: Document): Element[] {
+        return []; // The default behavior is no margins
+    }
 }
 
 export class EditionWithBody extends Edition {
-    public getRootElements(document: Document): Element[] {
+    public getMainRootElements(document: Document): Element[] {
         try {
             return [document.getElementsByTagName('body')[0]];
         } catch(err) {
@@ -39,8 +42,14 @@ export class EditionWithBody extends Edition {
 } 
 
 export class MSEdition extends Edition { 
-    public getRootElements(document: Document): Element[] {
+    public getMainRootElements(document: Document): Element[] {
         const xpath = "//tei:zone[@type='main']";
+        const nodes = evaluateXPath(document, xpath);
+        return nodes.map((n) => n as Element);
+    }
+
+    public getMarginRootElements(document: Document): Element[] {
+        const xpath = "//tei:zone[@type='left_margin']";
         const nodes = evaluateXPath(document, xpath);
         return nodes.map((n) => n as Element);
     }
@@ -51,7 +60,8 @@ export class Chunk {
     public readonly edition: Edition;
     public readonly chunkNumber: number;
     public readonly tei: Document;
-    public readonly roots: Element[];
+    public readonly mainRoots: Element[];
+    public readonly marginRoots: Element[];
     public readonly variations: Spine;
 
     private constructor(edition: Edition, chunkNumber: number, tei: Document, spine: Spine) {
@@ -59,7 +69,8 @@ export class Chunk {
         this.chunkNumber = chunkNumber;
         this.tei = tei;
         this.variations = spine;
-        this.roots = edition.getRootElements(tei);
+        this.mainRoots = edition.getMainRootElements(tei);
+        this.marginRoots = edition.getMarginRootElements(tei);
     }
 
     public static async load(edition: Edition, chunkNumber: number): Promise<Chunk> {
@@ -68,7 +79,7 @@ export class Chunk {
         await spine.initialize();
 
         const chunk = new Chunk(edition, chunkNumber, document, spine);
-        chunk.addAppReferences();
+        // chunk.addAppReferences();
 
         return chunk;
     }
@@ -79,8 +90,5 @@ export class Chunk {
             throw new Error(`Can't locate app ${appRef}`);
         }
         return app;
-    }
-
-    private addAppReferences() {
     }
 }
