@@ -15,7 +15,7 @@ class Header extends React.Component<HeaderData> {
 
     render() {
         const editions = FvStore.editions.map((e, index) => 
-            <label key={index} className='edition-label'><EditionDot edition={e}/>{e.name}</label>);
+            <label key={index} className='edition-label'><EditionDot edition={e} key={e.code}/>{e.name}</label>);
         return (
             <div>
                 <header className='viewer__cols'>

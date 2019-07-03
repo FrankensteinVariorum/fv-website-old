@@ -22,5 +22,5 @@ class TeiReactText extends React.Component<TeiReactTextProps> {
         );
     }
 }
-            
+
 export default TeiReactText;

@@ -32,19 +32,23 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
       const groups = this.props.app.getOtherGroups(this.props.edition!);
       let dotElements: any[] = [];
       for(const group of groups) {
-         const groupDots = group.editions.map((ed) => <EditionDot edition={ ed } />);
+         const groupDots = group.editions.map((ed) => <EditionDot edition={ ed } key={ed.code} />);
          dotElements = dotElements.concat(groupDots);
          dotElements.push(<span className='dot dot-break'/>);
       }
 
-      console.log('dotElements ', dotElements);
+      let dotClasses = 'app-wrapper-dots';
+      if(!this.props.showText) {
+         dotClasses += ' no-text';
+      }
+
       return (
          <div className='app-wrapper' onClick={ this.onClick }>
             <div className={innerClasses}>
+               <div className={dotClasses}>
+                  { dotElements }
+               </div>
                { this.props.children }
-            </div>
-            <div className='app-wrapper-dots'>
-               { dotElements }
             </div>
          </div>
       );
