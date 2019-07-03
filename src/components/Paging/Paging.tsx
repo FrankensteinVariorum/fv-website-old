@@ -4,6 +4,7 @@ import Select from 'react-select';
 import { SelectOption } from '../EditionSelector/EditionSelector';
 import pre from '../../assets/pre.jpg';
 import next from '../../assets/next.jpg';
+import '../../styles/general.sass';
 
 
 interface PagingData {
@@ -75,15 +76,17 @@ class Paging extends React.Component<PagingData, PagingState> {
             <div>
                 {this.props.edition ?
                 <div>
-                    <label>CHOOSE A SECTION</label>
-                    <Select
-                        className='select-style'
-                        onChange={this.onChunkChanged}
-                        options={this.state.availableChunks}
-                        value={this.state.selectedOption}
-                    />
+                    <div className='in-line'>
+                        <label>CHOOSE A SECTION</label>
+                        <Select
+                            className='select-style'
+                            onChange={this.onChunkChanged}
+                            options={this.state.availableChunks}
+                            value={this.state.selectedOption}
+                        />
+                    </div>
                     
-                    <div>
+                    <div className='in-line paging-buttons'>
                         <button onClick={() => this.updateChunk(-1)} className={this.state.disablePrev ? 'disable-button': ''}
                             disabled={this.state.disablePrev}><img src={pre} alt={pre} /></button><label>Previous Section</label>
                         <label className='margin-button'>Next Section</label><button className={this.state.disableNext ? 'disable-button': ''} onClick={() => this.updateChunk(1)}

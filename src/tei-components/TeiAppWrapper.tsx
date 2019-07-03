@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Apparatus } from '../data/spine';
 import { Edition } from '../data/edition';
 import '../styles/tei.sass';
