@@ -1,54 +1,36 @@
 import React, { ReactNode } from 'react';
-import './TeiComponents.sass';
-import { Apparatus, ReadingGroup } from '../data/spine';
+import { Apparatus } from '../data/spine';
 import { Edition } from '../data/edition';
-import TeiReadingGroup from '../components/TeiReadingGroup/TeiReadingGroup';
+import '../styles/tei.sass';
 
-interface TeiAppWrapperData {
+interface TeiAppWrapperProps {
    showVariations: boolean;
    showText: boolean;
    edition?: Edition;
-   app?: Apparatus;
+   app: Apparatus;
+   onAppClick?: (app: Apparatus) => void,
 }
 
-interface TeiAppWrapperState {
-   groups: ReactNode[];
-}
-
-class TeiAppWrapper extends React.Component<TeiAppWrapperData, TeiAppWrapperState> {
-   state = {
-      groups: [],
-   }
-
-   appClicked = () => {
-      if (!this.props.edition || !this.props.app) {
-         console.error("can't show variations");
-         return;
+class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
+   onClick = () => {
+      if (this.props.showVariations && this.props.onAppClick) {
+         this.props.onAppClick(this.props.app);
       }
-      const otherGroups: ReadingGroup[] = this.props.app.getOtherGroups(this.props.edition);
-      const groups = [] as ReactNode[];
-      for (let i = 0; i < otherGroups.length; i++) {
-         groups.push(React.createElement(TeiReadingGroup, {
-            key: i,
-            editions: otherGroups[i].editions,
-            element: otherGroups[i].element}))
-      }
-
-      this.setState( {groups} );
    }
 
    render() {
+      const intensity = this.props.app.n || 0;
+      const level = (intensity < 10) ? 0 : (intensity < 100) ? 1  : (intensity < 1000) ? 2 : 3;
+      const classNames = `app-wrapper app-intensity-${level}`;
+
       return (
          <div> {
             this.props.showVariations ?
-               <div className='app-wrapper' onClick={this.appClicked}>
+               <div className={ classNames } onClick={this.onClick}>
                   {this.props.children}
                </div>
                : <div>{this.props.children}</div>
             }
-            <div>
-              {this.state.groups}
-            </div>
          </div>
       );
    }

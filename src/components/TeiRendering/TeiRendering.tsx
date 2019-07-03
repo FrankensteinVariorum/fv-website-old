@@ -8,7 +8,7 @@ interface TeiRenderingProps {
     showVariations: boolean;
     showText: boolean;
     edition: Edition;
-    onAppClick: (app: Apparatus) => void;
+    onAppClick?: (app: Apparatus) => void;
 }
 
 interface TeiRenderingState {
@@ -45,8 +45,8 @@ class TeiRendering extends React.Component<TeiRenderingProps, TeiRenderingState>
     getTeiObjects = () => {
         const body = this.props.chunk.root;
     
-        const converter = new TeiConverter(this.props.showVariations, this.props.showText, this.props.edition);
-        const reactElement = converter.teiToReactElement(body, this.props.chunk);
+        const converter = new TeiConverter(this.props.showVariations, this.props.showText, this.props.edition, this.props.chunk);
+        const reactElement = converter.teiToReactElement(body);
 
         this.setState( { processing: false, elements: [reactElement]});
     } 
