@@ -14,12 +14,7 @@ export default class XmlCache {
         this._promises = new Map<string, Promise<Document>>();
     }
 
-    public async getXML(url: string) {
-        const doc = await this.innerGetXML(url);
-        return doc;
-    }
-
-    private innerGetXML(url: string): Promise<Document> {
+    public getXML(url: string): Promise<Document> {
         // This function is async, but we implement the Promises ourselves, since we also cache promises
         // This code only works because asynchronous Javascript is single threaded (note there are no locks)
         if (this._xmls.has(url)) {

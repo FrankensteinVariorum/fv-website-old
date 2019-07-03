@@ -7,6 +7,8 @@ import Paging from '../Paging/Paging';
 import Header from '../Header/Header';
 import OptionsSelector from '../OptionsSelector/OptionsSelector';
 import '../../styles/general.sass';
+import { Apparatus } from '../../data/spine';
+import AppList from '../AppList/AppList';
 
 interface ViewerProperties { }
 
@@ -16,6 +18,7 @@ interface ViewerState {
     edition?: Edition,
     showVariations: boolean,
     showText: boolean,
+    app: Apparatus | undefined,
 }
 
 class Viewer extends React.Component <ViewerProperties, ViewerState> {
@@ -27,6 +30,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
 
         showVariations: true,
         showText: true,
+        app: undefined,
     }
 
     
@@ -48,6 +52,10 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     }
     onText = (show: boolean) => {
         this.setState( { showText: show } );
+    }
+
+    onAppClick = (app: Apparatus) => {
+        this.setState( {app} );
     }
 
     render() {
@@ -77,14 +85,15 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                 
                 <Header
                 edition={this.state.edition} />
+                { this.state.app ? <AppList app={this.state.app!}/> : '' }
 
                 { this.state.chunk && this.state.edition ? 
                 <TeiRendering
                 chunk={this.state.chunk}
                 edition={this.state.edition}
                 showVariations={this.state.showVariations}
-                showText={this.state.showText} /> : '' }
-
+                showText={this.state.showText}
+                onAppClick={this.onAppClick}/> : ''}
 
                 <hr className='line' />
                 <div className='row'>

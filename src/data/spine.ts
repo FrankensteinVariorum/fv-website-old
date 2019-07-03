@@ -195,10 +195,6 @@ export class Spine {
             return;
         }
 
-        if (this._initialized) {
-            return;
-        }
-
         this._xml = await this.getXML();
 
         await this.parseApps();

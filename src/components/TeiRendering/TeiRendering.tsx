@@ -1,12 +1,14 @@
 import React, { ReactNode } from 'react';
 import { TeiConverter } from '../../tei-processing/tei-converter';
 import { Chunk, Edition } from '../../data/edition';
+import { Apparatus } from '../../data/spine';
 
 interface TeiRenderingProps {
     chunk: Chunk;
     showVariations: boolean;
     showText: boolean;
     edition: Edition;
+    onAppClick: (app: Apparatus) => void;
 }
 
 interface TeiRenderingState {
