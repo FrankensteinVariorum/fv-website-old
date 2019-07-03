@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edition } from '../../data/edition';
+import { Edition, Chunk } from '../../data/edition';
 import Select from 'react-select';
 import { SelectOption } from './EditionSelector';
 import pre from '../../assets/pre.jpg';
@@ -7,7 +7,7 @@ import next from '../../assets/next.jpg';
 import '../../styles/general.sass';
 
 
-interface PagingData {
+interface PagingProps {
     edition: Edition | undefined;
     chunk: number;
     onChunkSelected: (chunk: number) => void;
@@ -21,7 +21,7 @@ interface PagingState {
     disableNext: boolean,
 }
 
-class Paging extends React.Component<PagingData, PagingState> {
+class Paging extends React.Component<PagingProps, PagingState> {
 
     state = {
         chunkIndex: this.props.chunk,
@@ -31,7 +31,7 @@ class Paging extends React.Component<PagingData, PagingState> {
         disableNext: false,
     }
 
-    componentDidUpdate(prevProps: PagingData) {
+    componentDidUpdate(prevProps: PagingProps) {
         if (this.props.edition !== prevProps.edition) {
             let chunks = [] as SelectOption[];
             if (this.props.edition) {
@@ -40,6 +40,22 @@ class Paging extends React.Component<PagingData, PagingState> {
                 this.setState( { availableChunks: chunks, chunkIndex: 0, selectedOption: chunks[0] });
                 this.props.onChunkSelected(firstChunk);
             }
+        }
+
+        if (this.props.chunk !== prevProps.chunk) {
+            const index = this.state.availableChunks.findIndex((opt) => opt.value === this.props.chunk.toString());
+            if (index !== -1) {
+                this.setState({ 
+                    chunkIndex: index, 
+                    selectedOption: this.state.availableChunks[index], 
+                    disablePrev: index===0, 
+                    disableNext: index===this.state.availableChunks.length - 1 
+                });
+            } else {
+                console.warn(`Can't set pager to non existing chunk ${this.props.chunk}`);
+                this.setState({ chunkIndex: 0, selectedOption: this.state.availableChunks[0], disablePrev: true, disableNext: this.state.availableChunks.length === 1 });
+            }
+            
         }
     }
 

@@ -19,20 +19,29 @@ interface EditionSelectorProps {
 
 interface EditionSelectorState {
     availableEditions: SelectOption[],
-    edition: Edition | undefined,
+    selectedEdition: SelectOption | undefined,
 }
 
 class EditionSelector extends React.Component<EditionSelectorProps, EditionSelectorState> {
 
     state = {
         availableEditions: [] as SelectOption[],
-        edition: undefined as Edition | undefined,
+        selectedEdition: undefined as SelectOption | undefined,
     }
     
     componentDidMount = () => {
         const editions = FvStore.editions.map((ed, index) => ({ key: index, value: ed.code, label: <label><EditionDot edition={ ed }/>{ed.name}</label> } as SelectOption));
 
         this.setState({ availableEditions: editions, });
+    }
+
+    componentDidUpdate(prevProps: EditionSelectorProps) {
+        if(prevProps.edition !== this.props.edition) {
+            const option = this.state.availableEditions.find((ed) => ed.value === this.props.edition.code);
+            if(option) {
+                this.setState( { selectedEdition: option });
+            }
+        }
     }
 
     editionChanged = (selectedOption: SelectOption) => {
@@ -42,6 +51,7 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
             return;
         }
 
+        this.setState( { selectedEdition: selectedOption });
         this.props.onEditionSelected(edition);
     }
 
@@ -54,6 +64,7 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
                 className='select-style'
                 onChange={this.editionChanged}
                 options={this.state.availableEditions}
+                value={this.state.selectedEdition}
             ></Select>
         </div>
         );

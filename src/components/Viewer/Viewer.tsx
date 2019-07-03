@@ -17,6 +17,7 @@ interface ViewerProperties { }
 interface ViewerState {
     loading: boolean,
     chunk?: Chunk,
+    chunkNumber: number,
     edition?: Edition,
     showVariations: boolean,
     showText: boolean,
@@ -43,12 +44,11 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
             throw new Error("Cannot get chunk if there is no an edition");
         }
         const chunk = await Chunk.load(this.state.edition, chunkNumber);
-        this.setState( {loading: false, chunk } );
+        this.setState( {loading: false, chunk, chunkNumber: chunk.chunkNumber, app: undefined } );
     }
 
     onNewEdition = (edition: Edition) => {
-        this.setState( {edition } );
-        console.log("edition changed. state.edition=", this.state.edition)
+        this.setState( { edition, app: undefined } );
     }
     onVariation = (show: boolean) => {
         this.setState( { showVariations: show } );
