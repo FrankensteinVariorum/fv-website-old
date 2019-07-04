@@ -58,7 +58,7 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
     render() {
         return (
         <div>
-            <label>CHOOSE A VERSION</label>
+            <label className='bold-choose'>CHOOSE A VERSION</label>
             <Select
                 className='select-style'
                 onChange={this.editionChanged}

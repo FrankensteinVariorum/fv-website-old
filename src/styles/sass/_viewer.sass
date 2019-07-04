@@ -8,12 +8,13 @@
       margin-bottom: 0
 
 #viewer__controls
+  margin-bottom: 30px
   display: grid
   grid-template-columns: 2fr 4fr 2fr
   grid-gap: rv(0)
 
   > *
-    background-color: $lightest_neutral
+    margin-left: 100px
     padding-top: rv(-1)
     padding-bottom: rv(-1)
     
@@ -24,7 +25,6 @@
   grid-gap: rv(0)
 
   > *
-    background-color: $lightest_neutral
     padding-top: rv(-1)
     padding-bottom: rv(-1)
     
@@ -34,9 +34,11 @@
   grid-gap: rv(0)
 
   > *
-    background-color: $lightest_neutral
     padding-top: rv(-1)
     padding-bottom: rv(-1)
+    
+.center-label
+  text-align: center
 
 #viewer__marginalia
   display: flex
@@ -54,4 +56,23 @@
   
 .line
     border-top: 6px solid
-    background-color: $lightest_neutral
+
+.variations
+    width: 60%
+    height: 60%
+    float: right
+
+#viewer_variations
+    padding-left: 40px
+
+#viewer__legend-editions
+    padding-top: 40px
+
+#viewer__legend-variance
+  display: flex
+  justify-content: space-around
+  padding-top: 40px
+  label
+    font-size: 80%
+    margin-left: 50px
+    padding-top: 20px

@@ -20,22 +20,22 @@ class Header extends React.Component<HeaderData> {
                     <div id='viewer__legend-editions'>
                         {editions}
                     </div>
-                    <div id='viewer__title'>
+                    <div id='viewer__title'  className='center-label'>
                         {this.props.edition ?
                         <h2>{this.props.edition.name} Edition</h2>
                         : <h2>Edition</h2>}
                     </div>
                     <div id='viewer__legend-variance'>
                         <label>Amount of Variance</label>
-                        <img src={variations} alt={variations} />
+                        <img className='variations' src={variations} alt={variations} />
                     </div>
                 </header>
 
                 <hr className='line' />
                 <div className='viewer__cols'>
-                    <div>Marginalia</div>
-                    <div>Text</div>
-                    <div>Variations</div>
+                    <div className='center-label'>Marginalia</div>
+                    <div className='center-label'>Text</div>
+                    <div className='center-label'>Variations</div>
                 </div>
             </div>
         );

@@ -1,6 +1,4 @@
 import React from 'react';
-import './App.css';
-// import Collator from './collator/Collator';
 import Viewer from './components/Viewer/Viewer';
 import './styles/sass/style.sass';
 

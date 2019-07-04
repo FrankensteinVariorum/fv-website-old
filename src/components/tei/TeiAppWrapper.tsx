@@ -32,7 +32,7 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
       let dotElements: any[] = [];
       let key = 0;
       for(const group of groups) {
-         const groupDots = group.editions.map((ed) => <EditionDot edition={ ed } key={ed.code} />);
+         const groupDots = group.editions.map((ed) => <EditionDot small={true} edition={ ed } key={ed.code} />);
          dotElements = dotElements.concat(groupDots);
          dotElements.push(<span className='dot dot-break' key={key}/>);
          key++;

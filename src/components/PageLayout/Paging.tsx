@@ -1,9 +1,7 @@
 import React from 'react';
-import { Edition, Chunk } from '../../data/edition';
+import { Edition } from '../../data/edition';
 import Select from 'react-select';
 import { SelectOption } from './EditionSelector';
-import pre from '../../assets/pre.jpg';
-import next from '../../assets/next.jpg';
 
 interface PagingProps {
     edition: Edition | undefined;
@@ -91,7 +89,7 @@ class Paging extends React.Component<PagingProps, PagingState> {
                 {this.props.edition ?
                 <div>
                     <div className='in-line'>
-                        <label>CHOOSE A SECTION</label>
+                        <label className='bold-choose'>CHOOSE A SECTION</label>
                         <Select
                             className='select-style'
                             onChange={this.onChunkChanged}
@@ -101,10 +99,10 @@ class Paging extends React.Component<PagingProps, PagingState> {
                     </div>
                     
                     <div className='in-line paging-buttons'>
-                        <button onClick={() => this.updateChunk(-1)} className={this.state.disablePrev ? 'disable-button': ''}
-                            disabled={this.state.disablePrev}><img src={pre} alt={pre} /></button><label>Previous Section</label>
-                        <label className='margin-button'>Next Section</label><button className={this.state.disableNext ? 'disable-button': ''} onClick={() => this.updateChunk(1)}
-                            disabled={this.state.disableNext}><img src={next} alt={next} /></button>
+                        <button onClick={() => this.updateChunk(-1)} className='prev'
+                            disabled={this.state.disablePrev}></button><label>Previous Section</label>
+                        <label className='margin-button'>Next Section</label><button className='next'
+                            onClick={() => this.updateChunk(1)} disabled={this.state.disableNext}></button>
                     </div>
                 </div>
                 : ''}

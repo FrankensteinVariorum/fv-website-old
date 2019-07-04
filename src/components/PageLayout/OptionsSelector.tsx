@@ -46,7 +46,7 @@ class OptionsSelector extends React.Component<OptionsSelectorProps, OptionsSelec
     render() {
         return (
         <div>
-            <label className='options-label'>CHOOSE OPTIONS</label>
+            <label className='options-label bold-choose'>CHOOSE OPTIONS</label>
             <label className='options-label'>
                 <input
                     name="variation"

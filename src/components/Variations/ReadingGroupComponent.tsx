@@ -12,7 +12,7 @@ class ReadingGroupComponent extends React.Component<ReadingGroupComponentProps> 
     render() {
         const editionNames = this.props.group.editions.map((ed) => ed.name);
         const title = editionNames.join(', ')
-        const dots = this.props.group.editions.map((ed) => <EditionDot edition={ed} key={ed.code}/>);
+        const dots = this.props.group.editions.map((ed) => <EditionDot small={true} edition={ed} key={ed.code}/>);
 
         const converter = new TeiConverter(false, true);
         const content = converter.teiToReactElement(this.props.group.element);
