@@ -2,6 +2,22 @@
    @file viewer/_tei.sass 
    @author Research Software Company
    @description Frankenstein Variorum Viewer TEI styles. */
+  
+  
+// General Viewer text sizing
+
+.tei-container
+  font-size: 1.25em
+  line-height: 3.5em;
+  padding: 0.5em 0
+  
+  div, p
+    font-size: inherit
+    line-height: inherit
+
+  div
+      display: inline 
+
 
 .tei-cdata
     &.no-text
@@ -9,8 +25,6 @@
 
     &.tei-del
         text-decoration: line-through
-
-    line-height: 3em;
 
 .app-intensity-0
     background-color: map-get($app_intensities_map, 0)
@@ -29,18 +43,34 @@
 
 .reading-group-content
     font-size: 80%
-    div
-        display: inline 
     
 .app-wrapper
     position: relative
+    padding: 0.5em 0
 
 .app-wrapper-dots
     width: 200px;
     position: absolute
-    top: 1em
+    top: 1.75em
     left: 0
 
 .app-wrapper-dots.no-text
-    top: 0
-    left: 1em
+    top: 0.25em
+    left: 0.5em
+    
+.reading-group
+  margin-top: 2em
+    
+.reading-group-dots
+  .small-dot
+    height: 1em !important
+    width: 1em !important
+
+    
+.reading-group-title
+  font-family: $altfont
+  font-weight: $semiboldfw
+  font-size: 0.8em
+  color: $dark_neutral
+  margin-top: 0.5em
+  

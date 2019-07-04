@@ -39,30 +39,32 @@ $clr4: #8380E2  // Cloudless Blue
 $clr5: #E378BF  // Feverish Cheek
 $clr6: #6FBCC0  // Everlasting Ice
 
-// Color map examples
-
-$clr1_map: (shade: darken($clr1,20%), primary: $clr1, tint: lighten($clr1,10%), fade: lighten($clr1,20%), watermark: lighten($clr1,30%))
-$clr2_map: (shade: darken($clr2,20%), primary: $clr2, tint: lighten($clr2,10%), fade: lighten($clr2,20%), watermark: lighten($clr2,30%))
-$clr3_map: (shade: darken($clr3,20%), primary: $clr3, tint: lighten($clr3,10%), fade: lighten($clr3,20%), watermark: lighten($clr3,30%))
-$clr4_map: (shade: darken($clr4,20%), primary: $clr4, tint: lighten($clr4,10%), fade: lighten($clr4,20%), watermark: lighten($clr4,30%))
-$clr5_map: (shade: darken($clr5,20%), primary: $clr5, tint: lighten($clr5,10%), fade: lighten($clr5,20%), watermark: lighten($clr5,30%))
-$clr6_map: (shade: darken($clr6,20%), primary: $clr6, tint: lighten($clr6,10%), fade: lighten($clr6,20%), watermark: lighten($clr6,30%))
-
-// Define alternative blackpoint, whitepoint and neutrals.
+// Define alternative blackpoint, whitepoint.
 
 $black: #3F3730  // Devouring Black
 $white: #FFFFFF
-$neutral: mix($black,$white, 50%)
+$neutral: mix($white,$black,50%)
 
-$impact: #FF0000
 
-$lightest_neutral: mix($black,$white, 6%)
-$lighter_neutral: mix($black,$white, 15%)
-$light_neutral: mix($black,$white, 25%)
+// Color map examples
 
-$mid_neutral: mix($black,$white, 55%)
-$dark_neutral: mix($black,$white, 65%)
-$darker_neutral: mix($black,$white, 90%)
+$clr1_map: (shade: mix($black,$clr1,20%), primary: $clr1, tint: mix($white,$clr1,10%), fade: mix($white,$clr1,50%), watermark: mix($white,$clr1,70%))
+$clr2_map: (shade: mix($black,$clr2,20%), primary: $clr2, tint: mix($white,$clr2,10%), fade: mix($white,$clr2,50%), watermark: mix($white,$clr2,70%))
+$clr3_map: (shade: mix($black,$clr3,20%), primary: $clr3, tint: mix($white,$clr3,10%), fade: mix($white,$clr3,50%), watermark: mix($white,$clr3,70%))
+$clr4_map: (shade: mix($black,$clr4,20%), primary: $clr4, tint: mix($white,$clr4,10%), fade: mix($white,$clr4,50%), watermark: mix($white,$clr4,70%))
+$clr5_map: (shade: mix($black,$clr5,20%), primary: $clr5, tint: mix($white,$clr5,10%), fade: mix($white,$clr5,50%), watermark: mix($white,$clr5,70%))
+$clr6_map: (shade: mix($black,$clr6,20%), primary: $clr6, tint: mix($white,$clr6,10%), fade: mix($white,$clr6,50%), watermark: mix($white,$clr6,70%))
+
+
+// Neutrals
+
+$lightest_neutral: mix($white,$black,95%)
+$lighter_neutral: mix($white,$black,80%)
+$light_neutral: mix($white,$black,70%)
+
+$mid_neutral: mix($white,$black,60%)
+$dark_neutral: mix($white,$black,40%)
+$darker_neutral: mix($white,$black,30%)
 
 // Functional Aliases
 
@@ -79,11 +81,11 @@ $pale_vermillion: $clr1
 $clr_ms: $clr4
 $clr_1818: $clr2 
 $clr_thomas: $clr5
-$clr_1823: $clr4
+$clr_1823: $clr6
 $clr_1831: $clr3
 
 
-$app_intensities_map: (0: lighten($black,95%), 1: lighten($black,80%), 2: lighten($black,70%), 3: lighten($black,60%))
+$app_intensities_map: (0: mix($white,$black,98%), 1: $lightest_neutral, 2: $lighter_neutral, 3: $light_neutral)
 
 // Define the colour of the page background
 

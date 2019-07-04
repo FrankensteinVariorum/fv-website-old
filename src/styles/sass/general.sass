@@ -4,7 +4,6 @@
    @description Frankenstein Variorum Viewer general styles . */
 
 .App
-    background-color: $lightest_neutral
     padding: 25px
     min-height: 100vh
 
@@ -20,24 +19,21 @@
   font-family: $altfont
 
 .dot 
-    height: 10px
-    width: 10px
+    height: 1em
+    width: 1em
     border-radius: 50%
     display: inline-block
     background-color: gray
     margin-right: 10px
 
 .small-dot
-    height: 6px !important
-    width: 6px !important
-    margin-right: 6px
+    height: 0.5em !important
+    width: 0.5em !important
+    margin-right: 0.5em
 
 .dot-break
     opacity: 0
 
-.select-style 
-    width: 200px
-    padding-top: 15px
 
 .ed-1818
     background-color: $clr_1818
@@ -54,8 +50,6 @@
 .ed-MS
     background-color: $clr_ms
 
-button
-    cursor: pointer
 
 .right
     float: right
@@ -88,9 +82,158 @@ button
 .in-line
     display: inline-block
 
-.bold-choose
-    font-weight: bold
-    padding-bottom: 10px
+
+// !VIEWER
+
+#viewer
+  hr
+    margin: 0.5em 0
+ 
+ 
+// Viewer Header
+
+#viewer
+  header
+    align-items: end
+    margin-top: 3rem
+    
+    &.viewer__cols
+      grid-template-columns: repeat(3,1fr)
+      
+      > *
+        padding-bottom: 0
+          
+    h2
+      margin: 0
+      font-weight: $lightfw
+      font-style: italic
+      text-align: center
+      width: 100%
+
+.edition-label, #viewer__legend-variance label
+  font-size: 0.75rem 
+  font-weight: $semiboldfw
+  color: $mid_neutral
+  font-family: $altfont
+  
+  .dot
+    transform: translateY(0.1em)
+    
+#viewer__legend-variance
+  display: flex
+  align-items: flex-end
+  
+  label
+    line-height: 0.5em
+    padding-right: 0.5em
+ 
+  img
+    width: 60%
+    
+  
+// Controls
+
+
+#viewer__controls, #viewer_pagination_controls
+  font-family: $altfont
+
+
+$label_ornament_width: 180px;
+
+#viewer__controls
+  > div
+    padding: $label_ornament_width/3 0 0 $label_ornament_width/2
+    position: relative
+    overflow: visible
+        
+    &:before
+      content: ''
+      position: absolute
+      z-index: -1
+      box-sizing: border-box
+      height: $label_ornament_width
+      width: $label_ornament_width
+      top: 0
+      left: 0
+      border-radius: $label_ornament_width/2
+      padding: $label_ornament_width/4
+      background-color: map-get($clr1_map,'watermark')
+      color: $white
+      font-size: 3rem
+      font-family: $headingfont
+      font-style: italic
+      
+      
+  > *:nth-child(1):before
+    content: '1'
+    
+  > *:nth-child(2):before
+    content: '2'
+
+  > *:nth-child(3):before
+    content: '3'
+      
+  .paging-buttons
+    display: none
+    
+  label:not(.bold-choose)
+    line-height: 1em
+    font-size: 1em
+    
+  input[type='checkbox']
+    appearance: none
+    -webkit-appearance: none
+    border: 2px solid $mid_neutral
+    height: 3em
+    width: 3em
+    margin-right: 1em
+    position: relative
+    box-sizing: border-box
+    
+    &:active, &:checked:active 
+      border-width: 3px
+      
+    &:before
+      content: ''
+      font-size: 2em
+      color: $dark_neutral
+      padding: 0.5em 0.25em 0 0.3em
+      
+    &:checked:before
+       content: '✓'
+
+// General Controls
+
+#viewer
+  input
+    box-sizing: border-box
+  
+  button
+      cursor: pointer
+    
+.select-style 
+    width: 250px
+    
+    > .css-yk16xz-control
+      border-color: $mid_neutral
+      border-width: 2px
+      border-radius: $border_radius
+
+label.bold-choose
+  font-weight: $normalfw
+  display: block
+  margin-bottom: 10px
+  
+.center-label
+  text-align: center
+  font-size: 1rem 
+  color: $dark_neutral
+  font-family: $altfont
+
+
+.css-1wa3eu0-placeholder
+  font-weight: $normalfw
+  color: $mid_neutral
 
 .paging-buttons
     margin-left: 25px
