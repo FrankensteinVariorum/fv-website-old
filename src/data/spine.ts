@@ -293,9 +293,12 @@ export class Spine {
 
         const targetElement = targetNodes[0] as Element;
         const idAttr = targetElement.attributes.getNamedItem('xml:id');
+        const mockIdAttr = targetElement.attributes.getNamedItem('mock-id');
         let xmlId = '';
         if (idAttr) {
             xmlId = idAttr.value;
+        } else if(mockIdAttr) {
+            xmlId = mockIdAttr.value;
         } else {
             xmlId = `mock-id-${Spine.mockElementCount}`;
             Spine.mockElementCount += 1;
