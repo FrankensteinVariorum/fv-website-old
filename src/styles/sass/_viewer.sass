@@ -8,20 +8,18 @@
       margin-bottom: 0
 
 #viewer__controls
-  margin-bottom: 30px
   display: grid
-  grid-template-columns: 2fr 4fr 2fr
+  grid-template-columns: repeat(3,1fr)
   grid-gap: rv(0)
 
   > *
-    margin-left: 100px
     padding-top: rv(-1)
     padding-bottom: rv(-1)
     
     
 #viewer_pagination_controls
   display: grid
-  grid-template-columns: 1fr 2fr 2fr 
+  grid-template-columns: repeat(3,1fr)
   grid-gap: rv(0)
 
   > *
@@ -36,9 +34,6 @@
   > *
     padding-top: rv(-1)
     padding-bottom: rv(-1)
-    
-.center-label
-  text-align: center
 
 #viewer__marginalia
   display: flex
@@ -63,10 +58,14 @@
     float: right
 
 #viewer_variations
-    padding-left: 40px
+  padding-left: 40px
+  position: sticky
+  top: 0
+  left: 0
+  height: 100vh
 
 #viewer__legend-editions
-    padding-top: 40px
+  padding-top: 40px
 
 #viewer__legend-variance
   display: flex
