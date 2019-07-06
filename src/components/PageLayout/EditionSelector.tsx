@@ -31,7 +31,9 @@ class EditionSelector extends React.Component<EditionSelectorProps, EditionSelec
     componentDidMount = () => {
         const editions = FvStore.editions.map((ed, index) => ({ key: index, value: ed.code, label: <label><EditionDot edition={ ed }/>{ed.name}</label> } as SelectOption));
 
-        this.setState({ availableEditions: editions, });
+        // Select the first edition
+        this.setState({ availableEditions: editions, selectedEdition: editions[0] });
+        this.props.onEditionSelected(this.props.editions[0]);
     }
 
     componentDidUpdate(prevProps: EditionSelectorProps) {

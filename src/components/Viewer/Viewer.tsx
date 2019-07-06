@@ -103,8 +103,6 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
 
                 <hr className='line' />
                 <footer id="viewer_pagination_controls">
-                    <div></div>
-                    
                     <EditionSelector
                     key={2}
                     editions={FvStore.editions} 
