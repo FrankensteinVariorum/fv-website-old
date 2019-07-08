@@ -29,11 +29,18 @@
 .viewer__cols
   display: grid
   grid-template-columns: 2fr 4fr 2fr
-  grid-gap: rv(0)
+  grid-column-gap: rv(1)
 
   > *
     padding-top: rv(-1)
     padding-bottom: rv(-1)
+    
+#viewer_variations
+  min-height: 100vh
+
+  > *
+    position: sticky
+    top: 0
 
 #viewer__marginalia
   display: flex
@@ -57,12 +64,6 @@
     height: 60%
     float: right
 
-#viewer_variations
-  padding-left: 40px
-  position: sticky
-  top: 0
-  left: 0
-  height: 100vh
 
 #viewer__legend-editions
   padding-top: 40px
@@ -71,6 +72,7 @@
   display: flex
   justify-content: space-around
   padding-top: 40px
+  
   label
     font-size: 80%
     margin-left: 50px
