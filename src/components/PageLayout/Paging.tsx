@@ -31,9 +31,18 @@ class Paging extends React.Component<PagingProps, PagingState> {
         if (this.props.edition !== prevProps.edition) {
             let chunks = [] as SelectOption[];
             if (this.props.edition) {
+                debugger;
                 chunks = this.props.edition.chunks.map((c) => ({ value: c.toString(), label: c.toString() } as SelectOption));
-                const firstChunk = this.props.edition.chunks[0];
-                this.setState( { availableChunks: chunks, chunkIndex: 0, selectedOption: chunks[0] });
+                let prevChunkIndex = 0;
+                if (prevProps) {
+                    prevChunkIndex = this.state.availableChunks.findIndex((opt) => opt.value === prevProps.chunk.toString());
+                    if (prevChunkIndex === -1) {
+                        prevChunkIndex = 0;
+                    }
+                }
+
+                const firstChunk = this.props.edition.chunks[prevChunkIndex];
+                this.setState( { availableChunks: chunks, chunkIndex: prevChunkIndex, selectedOption: chunks[prevChunkIndex] });
                 this.props.onChunkSelected(firstChunk);
             }
         }
