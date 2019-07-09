@@ -1,5 +1,13 @@
 @import './_00_configuration.sass'
 
+// Hack to hide marginalia column header
+// This declaration is too ambiguous, but is the only way to target this label given 
+// the current DOM structure. Remove when marginalia functionality complete.
+
+#viewer .viewer__cols > .center-label:first-child
+  visibility: hidden
+
+
 #viewer
   > *
     margin-bottom: rv(0)
@@ -40,7 +48,7 @@
 
   > *
     position: sticky
-    top: 0
+    top: rv(0)
 
 #viewer__marginalia
   display: flex
@@ -60,9 +68,8 @@
     border-top: 6px solid
 
 .variations
-    width: 60%
-    height: 60%
-    float: right
+  width: 60%
+  float: right
 
 
 #viewer__legend-editions
