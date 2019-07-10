@@ -59,6 +59,14 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     }
 
     render() {
+        const viewerClasses = ['viewer__cols'];
+        if (this.state.showText) {
+            viewerClasses.push('view-text');
+        }
+        if (this.state.showVariations) {
+            viewerClasses.push('view-variations');
+        }
+        
         return (
             <section id='viewer'>
                 <div id='viewer__controls'>
@@ -86,7 +94,7 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                 <Header
                 edition={this.state.edition} />
 
-                <div id='viewer__contents' className='viewer__cols'>
+                <div id='viewer__contents' className={viewerClasses}>
                     <aside id="viewer__marginalia">
                     </aside>
                     { this.state.chunk && this.state.edition ? 
