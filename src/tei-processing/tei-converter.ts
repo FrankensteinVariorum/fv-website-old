@@ -18,6 +18,8 @@ export class TeiConverter {
             return 'p';
         } else if (teiTag === 'head') {
             return 'h3';
+        } else if (teiTag === 'ab') {
+            return 'p';
         }
 
         return undefined;
