@@ -85,6 +85,7 @@ export class TeiConverter {
 
         if (this.chunk && this.showVariations && teiProps['app-ref']) {
             const app = this.chunk.getApp(teiProps['app-ref']);
+            const firstInApp = teiProps['first-in-app'] === 'true';
 
             // We have an <app> to wrap around the element
             reactElement = React.createElement(TeiAppWrapper, {
@@ -93,7 +94,7 @@ export class TeiConverter {
                 showText: this.showText,
                 edition: this.edition,
                 onAppClick,
-                app},
+                app, firstInApp},
             [reactElement])
         }
 

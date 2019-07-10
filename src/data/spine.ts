@@ -337,12 +337,17 @@ export class Spine {
         // We will add the back pointers to all editions while we're at it
         // Backpointers are an attribute - app-ref, which contains the id of the app element
         for(let app of this.apps) {
+            const visitedApp = new Set<string>();
             for(let ptr of app.pointers) {
                 if (!ptr.dereferenced) {
                     console.error('Non dereferenced pointed in addBackPointers - pointers should all be dereferenced by now');
                     continue;
                 }
+                const firstInApp = !visitedApp.has(ptr.referencedUrl);
                 ptr.dereferenced!.setAttribute('app-ref', app.id);
+                ptr.dereferenced!.setAttribute('first-in-app', firstInApp ? 'true' : 'false');
+                console.log(ptr.dereferenced!.outerHTML);
+                visitedApp.add(ptr.referencedUrl);
             }
         }
     }

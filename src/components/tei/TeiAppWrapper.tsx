@@ -8,6 +8,7 @@ interface TeiAppWrapperProps {
    showText: boolean;
    edition?: Edition;
    app: Apparatus;
+   firstInApp: boolean;
    onAppClick?: (app: Apparatus) => void,
 }
 
@@ -44,10 +45,10 @@ class TeiAppWrapper extends React.Component<TeiAppWrapperProps> {
       }
 
       return (
-         <div className={classes} onClick={this.onClick}>
-            <div className={dotClasses}>
+         <div className={classes} onClick={this.onClick} data-app={this.props.app.id}>
+            { this.props.firstInApp ? <div className={dotClasses}>
                { dotElements }
-            </div>
+            </div> : '' }
             { this.props.children }
          </div>
       );
