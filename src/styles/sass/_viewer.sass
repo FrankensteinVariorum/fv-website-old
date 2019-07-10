@@ -27,7 +27,7 @@
     
 #viewer_pagination_controls
   display: grid
-  grid-template-columns: repeat(3,1fr)
+  grid-template-columns: 30% 1fr
   grid-gap: rv(0)
 
   > *
@@ -49,6 +49,8 @@
   > *
     position: sticky
     top: rv(0)
+    max-height: 100vh
+    overflow: scroll
 
 #viewer__marginalia
   display: flex

@@ -197,7 +197,7 @@ $label_ornament_width: 180px;
       content: ''
       font-size: 2em
       color: $dark_neutral
-      padding: 0.5em 0.25em 0 0.4em
+      padding: 0.5em 0.25em 0 0.45em
       
     &:checked:before
        content: 'x'
@@ -236,35 +236,40 @@ label.bold-choose
   font-weight: $normalfw
   color: $mid_neutral
 
-.paging-buttons
+.in-line.paging-buttons
     margin-left: 25px
+    display: inline-flex
+    align-items: center
+    
+    button
+      margin: 1em
 
 .prev 
-    height: 30px
-    width: 30px
-    border: none !important
-    background: url("../../images/prev_btn.svg") no-repeat
+  height: 30px
+  width: 30px
+  border: none !important
+  background: url("../../images/prev_btn.svg") no-repeat
    
 .prev:hover
-    background: url("../../images/prev_btn_over.svg") no-repeat
+  background: url("../../images/prev_btn_over.svg") no-repeat
     
 .prev:disabled
-    background: url("../../images/prev_btn_inactive.svg") no-repeat
-    cursor: not-allowed
+  background: url("../../images/prev_btn_inactive.svg") no-repeat
+  cursor: not-allowed
 
 .next
-    height: 30px
-    width: 30px
-    border: none !important
-    background: url("../../images/next_btn.svg") no-repeat
+  height: 30px
+  width: 30px
+  border: none !important
+  background: url("../../images/next_btn.svg") no-repeat
    
 .next:hover 
-    background: url("../../images/next_btn_over.svg") no-repeat
+  background: url("../../images/next_btn_over.svg") no-repeat
     
 .next:disabled
-    background: url("../../images/next_btn_inactive.svg") no-repeat
-    cursor: not-allowed
+  background: url("../../images/next_btn_inactive.svg") no-repeat
+  cursor: not-allowed
 
 .app-list-to-divider
-    border-top: 9px solid $neutral
-    margin-top: 40px
+  border-top: 9px solid $neutral
+  margin-top: 40px

@@ -16,8 +16,15 @@
     line-height: inherit
 
   div
-      display: inline 
-
+    display: inline 
+    
+    // Citation
+            
+    &.tei-cit
+      font-size: 0.9em
+      display: inline-block
+      padding: 1em 2em
+        
 
 .tei-cdata
     &.no-text
@@ -51,6 +58,7 @@
 .app-wrapper
     position: relative
     padding: 0.5em 0
+    border-left: 1px dotted $lightest_neutral
 
 .app-wrapper-dots
     width: 200px;
@@ -79,3 +87,7 @@
   color: $dark_neutral
   margin-top: 0.5em
   
+// Citation source
+
+.tei-bibl
+  font-style: italic
