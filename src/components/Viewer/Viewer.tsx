@@ -59,14 +59,14 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     }
 
     render() {
-        const viewerClasses = ['viewer__cols'];
+        let viewerClasses = 'viewer__cols';
         if (this.state.showText) {
-            viewerClasses.push('view-text');
+            viewerClasses += ' view-text';
         }
         if (this.state.showVariations) {
-            viewerClasses.push('view-variations');
+            viewerClasses += ' view-variations';
         }
-        
+
         return (
             <section id='viewer'>
                 <div id='viewer__controls'>
