@@ -14,8 +14,13 @@ class ReadingGroupComponent extends React.Component<ReadingGroupComponentProps> 
         const title = editionNames.join(', ')
         const dots = this.props.group.editions.map((ed) => <EditionDot small={true} edition={ed} key={ed.code}/>);
 
-        const converter = new TeiConverter(false, true);
-        const content = converter.teiToReactElement(this.props.group.element);
+        let content;
+        if (this.props.group.element) {
+            const converter = new TeiConverter(false, true);
+            content = converter.teiToReactElement(this.props.group.element);    
+        } else {
+            content = (<div className='empty-group'>[Edition is missing here]</div>);
+        }
 
         return (
             <div className='reading-group'>

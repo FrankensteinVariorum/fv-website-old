@@ -22,12 +22,12 @@ export class ReadingGroup {
     public readonly groupId: string;
     public readonly editions: Edition[];
     public readonly apparatus: Apparatus;
-    public readonly element: Element;
+    public readonly element?: Element;
 
     private readonly pointers: PointerData[];
 
-    constructor(apparatus: Apparatus, groupId: string) {
-        this.groupId = groupId;
+    constructor(apparatus: Apparatus, private grpElement: Element) {
+        this.groupId = grpElement.getAttribute('xml:id')!;
         this.apparatus = apparatus;
         this.editions = this.fillEditions();
         this.pointers = this.fillPointers();
@@ -35,12 +35,9 @@ export class ReadingGroup {
     }
 
     private fillEditions() {
-        const editions = [] as Edition[];
-        for (const ptr of this.apparatus.pointers) {
-            if (ptr.groupId === this.groupId && editions.indexOf(ptr.edition) === -1) {
-                editions.push(ptr.edition);
-            }
-        }
+        const rdgElements = Array.from(this.grpElement.getElementsByTagName('rdg'));
+        const editionCodes = rdgElements.map((rdg) => rdg.getAttribute('wit')!.substr(2)); // <rdg wit="#fMS">
+        const editions = editionCodes.map((ec) => FvStore.editions.find((ed) => ed.code === ec)!);
 
         return editions;
     }
@@ -54,6 +51,10 @@ export class ReadingGroup {
     private buildElement() {
         // Build a new XML element that contains all the dereferenced pointers in this group
         // We create a new document for each such element
+        if (this.pointers.length === 0) {
+            return undefined;
+        }
+
         const doc = document.implementation.createDocument(null, null, null);
         const group = doc.createElement('rdgGrp');
         const children = this.pointers.map((ptr) => ptr.dereferenced!);
@@ -94,8 +95,9 @@ export class Apparatus {  // Content of the <app> tag
     public get groups() { return this._groups; }
 
     public buildGroups() {
-        const groupSet = new Set<string>(this.pointers.map((ptr) => ptr.groupId));
-        this._groups = Array.from(groupSet).map((grp) => new ReadingGroup(this, grp));
+        const groupElements = Array.from(this.element.getElementsByTagName('rdgGrp'));
+        // const groupSet = new Set<string>(this.pointers.map((ptr) => ptr.groupId));
+        this._groups = Array.from(groupElements).map((grp) => new ReadingGroup(this, grp));
     }
 
     private parsePointers() {
