@@ -1,5 +1,6 @@
 import FvStore from "./store";
 import { Spine } from "./spine";
+import { Annotation } from "./annotation";
 import { evaluateXPath } from "../tei-processing/helpers";
 
 export abstract class Edition {
@@ -63,12 +64,14 @@ export class Chunk {
     public readonly mainRoots: Element[];
     public readonly marginRoots: Element[];
     public readonly variations: Spine;
+    public readonly annotation: Annotation | undefined;
 
-    private constructor(edition: Edition, chunkNumber: number, tei: Document, spine: Spine) {
+    private constructor(edition: Edition, chunkNumber: number, tei: Document, spine: Spine, annotation: Annotation | undefined) {
         this.edition = edition;
         this.chunkNumber = chunkNumber;
         this.tei = tei;
         this.variations = spine;
+        this.annotation = annotation;
         this.mainRoots = edition.getMainRootElements(tei);
         this.marginRoots = edition.getMarginRootElements(tei);
     }
@@ -78,7 +81,14 @@ export class Chunk {
         const spine = await FvStore.getSpine(chunkNumber);
         await spine.initialize();
 
-        const chunk = new Chunk(edition, chunkNumber, document, spine);
+        // Only initialize annotations for 1818.
+        let annotation
+        if (edition.code === '1818') {
+            annotation = await FvStore.getAnnotation(edition.code, chunkNumber);
+            await annotation.initialize();
+        }       
+
+        const chunk = new Chunk(edition, chunkNumber, document, spine, annotation);
         // chunk.addAppReferences();
 
         return chunk;

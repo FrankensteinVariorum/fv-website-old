@@ -5,6 +5,7 @@ import TeiReactElement from '../components/tei/TeiReactElement';
 import TeiReactText from '../components/tei/TeiReactText';
 import { Chunk, Edition } from '../data/edition';
 import TeiAppWrapper from '../components/tei/TeiAppWrapper';
+import TeiAnnotationWrapper from '../components/tei/TeiAnnotationWrapper';
 import { Apparatus } from '../data/spine';
 
 export class TeiConverter {
@@ -97,6 +98,17 @@ export class TeiConverter {
                 edition: this.edition,
                 onAppClick,
                 app, firstInApp},
+            [reactElement])
+        }
+
+        if (!this.showVariations && teiProps['annotatedBy']) {
+            const annotation: Object = this.chunk!.annotation!.getAnnotation(teiProps['annotatedBy'])
+            reactElement = React.createElement(TeiAnnotationWrapper, {
+                key: TeiConverter.index++,
+                showVariations: this.showVariations,
+                showText: this.showText,
+                edition: this.edition,
+                annotation},
             [reactElement])
         }
 

@@ -348,7 +348,7 @@ export class Spine {
                 const firstInApp = !visitedApp.has(ptr.referencedUrl);
                 ptr.dereferenced!.setAttribute('app-ref', app.id);
                 ptr.dereferenced!.setAttribute('first-in-app', firstInApp ? 'true' : 'false');
-                console.log(ptr.dereferenced!.outerHTML);
+                // console.log(ptr.dereferenced!.outerHTML);
                 visitedApp.add(ptr.referencedUrl);
             }
         }
