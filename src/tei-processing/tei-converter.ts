@@ -11,7 +11,7 @@ import { Apparatus } from '../data/spine';
 export class TeiConverter {
     private static index = 0;
 
-    constructor(private showVariations: boolean, private showText: boolean, private edition?: Edition, private chunk?: Chunk) {
+    constructor(private showVariations: boolean, private showAnnotations: boolean, private showText: boolean, private edition?: Edition, private chunk?: Chunk) {
     }
 
     private getHtmlTag(teiTag: string) {
@@ -41,7 +41,7 @@ export class TeiConverter {
         return valueProps;
     }
 
-    public teiToReactElement(node: Node, onAppClick?: (app: Apparatus) => void): ReactNode {  // Returns a single React element
+    public teiToReactElement(node: Node, onAppClick?: (app: Apparatus) => void, onAnnotationClick?: (annotations: Array<Object>) => void): ReactNode {  // Returns a single React element
         const reactChildren: ReactNode[] = [];
         // create elements for all children
         if (node.hasChildNodes()) {
@@ -49,7 +49,7 @@ export class TeiConverter {
                 const childNode = node.childNodes[i];
                 let childElement: ReactNode = undefined;
                 if (childNode.nodeType === 1) {
-                    childElement = this.teiToReactElement(childNode, onAppClick);
+                    childElement = this.teiToReactElement(childNode, onAppClick, onAnnotationClick);
                 } else if (childNode.nodeType === 3) {
                     let text = childNode.textContent || '';
                     text = text.trim();
@@ -58,6 +58,7 @@ export class TeiConverter {
                             text: childNode.textContent || '',
                             showText: this.showText,
                             showVariations: this.showVariations,
+                            showAnnotations: this.showAnnotations,
                             key: TeiConverter.index++,
                         });
                     }
@@ -81,6 +82,7 @@ export class TeiConverter {
             htmlTag: this.getHtmlTag(node.nodeName),
             showText: this.showText,
             showVariations: this.showVariations,
+            showAnnotations: this.showAnnotations,
             teiProps: teiProps,
         };
 
@@ -101,14 +103,16 @@ export class TeiConverter {
             [reactElement])
         }
 
-        if (!this.showVariations && teiProps['annotatedBy']) {
-            const annotation: Object = this.chunk!.annotation!.getAnnotation(teiProps['annotatedBy'])
+        if (this.chunk && this.showAnnotations && teiProps['annotatedBy']) {
+            // There may be multiple annotations targeting this element
+            const annotations: Array<Object> = teiProps["annotatedBy"].split(" ").map((target) => {
+                return this.chunk!.annotation!.getAnnotation(target)
+            })
             reactElement = React.createElement(TeiAnnotationWrapper, {
                 key: TeiConverter.index++,
-                showVariations: this.showVariations,
-                showText: this.showText,
-                edition: this.edition,
-                annotation},
+                showAnnotations: this.showAnnotations,
+                onAnnotationClick,
+                annotations},
             [reactElement])
         }
 

@@ -4,6 +4,7 @@ interface TeiReactTextProps {
     text: string;
     showText: boolean;
     showVariations: boolean;
+    showAnnotations: boolean;
 }
 
 class TeiReactText extends React.Component<TeiReactTextProps> {

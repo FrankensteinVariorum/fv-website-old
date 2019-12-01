@@ -16,7 +16,7 @@ class ReadingGroupComponent extends React.Component<ReadingGroupComponentProps> 
 
         let content;
         if (this.props.group.element) {
-            const converter = new TeiConverter(false, true);
+            const converter = new TeiConverter(false, false, true);
             content = converter.teiToReactElement(this.props.group.element);    
         } else {
             content = (<div className='empty-group'>[Edition is missing here]</div>);

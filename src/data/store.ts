@@ -55,7 +55,7 @@ import { Annotation } from "./annotation";
      }
 
      public getAnnotation(edition: string, chunk: number): Annotation {
-        const annotation = this.annotations.find((sp) => sp.editionCode === edition);
+        const annotation = this.annotations.find((sp) => sp.editionCode === edition && sp.chunkNumber === chunk);
 
         if(!annotation) {
             throw new Error(`Can't find annotations for edition ${edition}`);

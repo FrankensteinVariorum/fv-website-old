@@ -8,6 +8,7 @@ import Header from '../PageLayout/Header';
 import OptionsSelector from '../PageLayout/OptionsSelector';
 import { Apparatus } from '../../data/spine';
 import Variation from '../Variations/Variation';
+import Annotations from '../Annotations/Annotations';
 
 interface ViewerProperties { }
 
@@ -17,8 +18,10 @@ interface ViewerState {
     chunkNumber: number,
     edition?: Edition,
     showVariations: boolean,
+    showAnnotations: boolean,
     showText: boolean,
     app: Apparatus | undefined,
+    annotations: Array<Object> | undefined
 }
 
 class Viewer extends React.Component <ViewerProperties, ViewerState> {
@@ -29,8 +32,10 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
         chunkNumber: 0,
 
         showVariations: true,
+        showAnnotations: false,
         showText: true,
         app: undefined,
+        annotations: undefined,
     }
 
     
@@ -50,22 +55,32 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
     onVariation = (show: boolean) => {
         this.setState( { showVariations: show } );
     }
+    onAnnotation = (show: boolean) => {
+        this.setState( { showAnnotations: show } );
+    }
     onText = (show: boolean) => {
         this.setState( { showText: show } );
     }
 
     onAppClick = (app: Apparatus) => {
-        this.setState( {app} );
+        this.setState( {app, annotations: undefined} );
+    }
+
+    onAnnotationClick = (annotations: Array<Object>) => {
+        this.setState( {annotations, app: undefined} );
     }
 
     render() {
         let viewerClasses = 'viewer__cols';
-        if (this.state.showText) {
-            viewerClasses += ' view-text';
-        }
-        if (this.state.showVariations) {
-            viewerClasses += ' view-variations';
-        }
+        // if (this.state.showText) {
+        //     viewerClasses += ' view-text';
+        // }
+        // if (this.state.showVariations) {
+        //     viewerClasses += ' view-variations';
+        // }
+        // if (this.state.showAnnotations) {
+        //     viewerClasses += ' view-annotations';
+        // }
 
         return (
             <section id='viewer'>
@@ -85,8 +100,10 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
 
                     <OptionsSelector 
                     showVariations={this.state.showVariations}
+                    showAnnotations={this.state.showAnnotations}
                     showText={this.state.showText}
                     onVariationChanged={this.onVariation}
+                    onAnnotationChanged={this.onAnnotation}
                     onTextChanged={this.onText}
                     />
                 </div>
@@ -102,10 +119,13 @@ class Viewer extends React.Component <ViewerProperties, ViewerState> {
                     chunk={this.state.chunk}
                     edition={this.state.edition}
                     showVariations={this.state.showVariations}
+                    showAnnotations={this.state.showAnnotations}
                     showText={this.state.showText}
+                    onAnnotationClick={this.onAnnotationClick}
                     onAppClick={this.onAppClick}/> : <div></div>}
                     <aside id="viewer_variations">
                         { this.state.app ? <Variation app={this.state.app!} edition={this.state.edition!}/> : '' }
+                        { this.state.annotations ? <Annotations annotations={this.state.annotations!}/> : '' }
                     </aside>
                 </div>
 

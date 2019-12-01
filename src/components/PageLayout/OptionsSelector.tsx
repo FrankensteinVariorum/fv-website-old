@@ -2,14 +2,17 @@ import React from 'react';
 
 interface OptionsSelectorProps {
     showVariations: boolean,
+    showAnnotations: boolean,
     showText: boolean,
 
     onVariationChanged: (variation: boolean) => void;
+    onAnnotationChanged: (annotation: boolean) => void;
     onTextChanged: (text: boolean) => void;
 }
 
 interface OptionsSelectorState {
     showVariations: boolean,
+    showAnnotations: boolean,
     showText: boolean,
 }
 
@@ -17,6 +20,7 @@ class OptionsSelector extends React.Component<OptionsSelectorProps, OptionsSelec
 
     state = {
         showVariations: true,
+        showAnnotations: false,
         showText: true,
     }
     
@@ -36,6 +40,12 @@ class OptionsSelector extends React.Component<OptionsSelectorProps, OptionsSelec
         this.setState( { showVariations: newShow });
         this.props.onVariationChanged(newShow);
     }
+
+    onAnnotationChanged = () => {
+        const newShow = !this.state.showAnnotations;
+        this.setState( { showAnnotations: newShow });
+        this.props.onAnnotationChanged(newShow);
+    }
     
     onTextChanged = () => {
         const newShowText = !this.state.showText;
@@ -54,6 +64,15 @@ class OptionsSelector extends React.Component<OptionsSelectorProps, OptionsSelec
                     checked={this.state.showVariations}
                     onChange={this.onVariationChanged} />
                 See Variants
+            </label>
+
+            <label className='options-label'>
+                <input
+                    name="variation"
+                    type="checkbox"
+                    checked={this.state.showAnnotations}
+                    onChange={this.onAnnotationChanged} />
+                See Annotations
             </label>
             
             <label className='options-label'>

@@ -48,13 +48,10 @@ export class Annotation {
     }
     
     private async parsePointers() {
-        let ptrs = []
         const chunkStr = this.chunkNumber < 10 ? `0${this.chunkNumber}` : `${this.chunkNumber}`;
         const xml = await FvStore.cache.getXML(`https://raw.githubusercontent.com/PghFrankenstein/fv-data/master/variorum-chunks/f${this.editionCode}_C${chunkStr}.xml`)
 
-        ptrs = this._json!["json"].map((annotation: Object) => this.parsePointer(annotation, xml))
-
-        return ptrs;
+        this._json!["json"].map((annotation: Object) => this.parsePointer(annotation, xml));
     }
 
     private parsePointer(annotation: Object, xml: Document) {
@@ -62,7 +59,12 @@ export class Annotation {
         const target = evaluateXPath(xml, xpath)
         if (target.length > 0) {
             const el = <Element><any>target[0]
-            el.setAttribute("annotatedBy", annotation["id"])
+            const val = el.getAttribute("annotatedBy")
+            if (val) {                
+                el.setAttribute("annotatedBy", `${val} ${annotation["id"]}`)
+            } else {
+                el.setAttribute("annotatedBy", annotation["id"])
+            }
         }
         return xpath
     }

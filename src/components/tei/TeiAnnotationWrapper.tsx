@@ -1,42 +1,39 @@
 import React from 'react';
 import { Edition } from '../../data/edition';
+import manicule from '../../images/manicule.svg';
 
 interface TeiAnnotationWrapperProps {
-   showVariations: boolean;
-   showText: boolean;
-   edition?: Edition;
-   annotation: Object;
+   showAnnotations: boolean;
+   annotations: Array<Object>;
+   onAnnotationClick?: (annotations: Array<Object>) => void,
 }
 
 class TeiAnnotationWrapper extends React.Component<TeiAnnotationWrapperProps> {
-   state = {
-      showAnnotation: false
-   }
-
-   onClick = () => {
-      if (!this.state.showAnnotation) {
-         this.setState({showAnnotation: true})
-      } else {
-         this.setState({showAnnotation: false})
+   onClick = (e) => {
+      if (this.props.showAnnotations && this.props.onAnnotationClick) {
+         this.props.onAnnotationClick(this.props.annotations)
+         e.stopPropagation()
       }
    }
 
    render() {
-      let annotation
-      if (this.state.showAnnotation) {
-         const selector = this.props.annotation["target"]["selector"][0]
-         annotation = <div style={{lineHeight: '1.5em',
-            display: 'block', color: 'darkslategray', marginTop: '2em'}}>
-            <blockquote>"{selector.prefix} <span style={{color: 'red'}}>{selector.exact}</span> {selector.suffix}"</blockquote>
-            <span style={{fontStyle: "italic"}}>{this.props.annotation["body"][0]["value"]}</span>
-         </div>
-      }
       return (
-         <div style={{position: 'relative'}}>
-            <div onClick={this.onClick} style={{position: 'absolute', width: '1em', height: '1em', cursor: 'pointer', backgroundColor: 'red'}}></div>
-            {annotation}
+         <>
+            <div onClick={this.onClick} style={{
+               position: 'absolute',
+               width: '4em',
+               cursor: 'pointer',
+               left: '-5em',
+               marginTop: '1em',
+               display: 'flex',
+               alignItems: 'center',
+               borderBottom: '1px solid grey'
+               }}>
+               <span style={{paddingRight: '.5em', fontStyle: 'italic'}}>{this.props.annotations.length}</span>
+               <img src={manicule} style={{width: '40px'}}/>
+            </div>
             { this.props.children }
-         </div>
+         </>
       );
    }
 }
