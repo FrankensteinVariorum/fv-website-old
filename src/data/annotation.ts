@@ -55,7 +55,8 @@ export class Annotation {
     }
 
     private parsePointer(annotation: Object, xml: Document) {
-        const xpath = annotation["target"]["selector"][1]["startSelector"]["value"]
+        let selector = annotation["target"]["selector"].filter((s) => s["type"] === 'RangeSelector')[0]["startSelector"]
+        const xpath = selector["value"]
         const target = evaluateXPath(xml, xpath)
         if (target.length > 0) {
             const el = <Element><any>target[0]

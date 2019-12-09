@@ -32,7 +32,11 @@ import { Annotation } from "./annotation";
 
          this.spines = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => new Spine(i));
 
-         this.annotations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => new Annotation('1818', i));
+         this.annotations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => new Annotation('1818', i)).concat(
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => new Annotation('1823', i)),
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => new Annotation('1831', i)),
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => new Annotation('Thomas', i))
+         )
      }
 
      public getEdition(code: string): Edition {

@@ -81,9 +81,9 @@ export class Chunk {
         const spine = await FvStore.getSpine(chunkNumber);
         await spine.initialize();
 
-        // Only initialize annotations for 1818.
+        // Only initialize annotations for all printed editions (not the MS).
         let annotation
-        if (edition.code === '1818') {
+        if (edition.code !== 'MS') {
             annotation = await FvStore.getAnnotation(edition.code, chunkNumber);
             await annotation.initialize();
         }       
