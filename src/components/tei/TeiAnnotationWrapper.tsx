@@ -1,5 +1,4 @@
 import React from 'react';
-import { Edition } from '../../data/edition';
 import manicule from '../../images/manicule.svg';
 
 interface TeiAnnotationWrapperProps {

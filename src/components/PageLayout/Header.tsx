@@ -37,7 +37,7 @@ class Header extends React.Component<HeaderData> {
                     </div>
                     <div id='viewer__legend-variance'>
                         <label>Amount of Variance</label>
-                        <img className='variations' src={variations} alt={variations} />
+                        <img className='variations' src={variations} alt="variations scale" />
                     </div>
                 </header>
 
