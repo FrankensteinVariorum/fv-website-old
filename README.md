@@ -21,6 +21,17 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
+=================
+In case you need to kill the local process, on Windows in the Git Bash shell, first, view the processes running on port 3000 with:
+
+`netstat -ano | findstr :3000`
+
+Next, locate the PID number, which is the string of numbers all the way on the right. Kill the process with:
+
+`taskill //PID <PIDnumber> //F`
+
+=================
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.<br>
