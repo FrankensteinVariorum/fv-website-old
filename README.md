@@ -1,8 +1,17 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Installation
+* On your computer, install Node.js. Go to <https://nodejs.org>, and follow the instructions for your system (Mac, PC, Linux). 
+* Make sure it's added to your PATH environment variable in either environment. (Windows lets you set this up in the installation process.)
+* The Node script will complete installation. Also, let Node automatically install what tools it needs. 
+
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+
+At this point you may get an error indicating a problem with downloading node-sass.
 
 ### `npm start`
 
