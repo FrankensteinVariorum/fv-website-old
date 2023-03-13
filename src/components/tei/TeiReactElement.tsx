@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 
 export interface TeiReactElementProps {
    htmlTag?: string;
-   tag: string;npm
+   tag: string;
    id?: string;
    teiProps: any;
    showText: boolean;
