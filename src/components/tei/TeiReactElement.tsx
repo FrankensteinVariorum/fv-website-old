@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactHtmlParser from 'react-html-parser';
+import parse from 'html-react-parser';
 
 export interface TeiReactElementProps {
    htmlTag?: string;
-   tag: string;
+   tag: string;npm
    id?: string;
    teiProps: any;
    showText: boolean;
@@ -11,7 +11,7 @@ export interface TeiReactElementProps {
 }
 
 class TeiReactElement extends React.Component<TeiReactElementProps> {
-     
+
    render() {
       let tag = '';
       let closingTag = '';
@@ -24,9 +24,9 @@ class TeiReactElement extends React.Component<TeiReactElementProps> {
       return (
          <div className={`tei-element tei-${this.props.tag}`} data-tei-tag={this.props.tag}>
              {/* data-app-ref={appRef}> */}
-            {ReactHtmlParser(tag)}
+            {parse(tag)}
             {this.props.children}
-            {ReactHtmlParser(closingTag)}
+            {parse(closingTag)}
          </div>
       );
    }
